@@ -201,4 +201,85 @@ app.delete('/api/jeux/delete/:id', async(req, res) => {
     }
 });
 
+// ---LOCATION ROUTES---
+
+//GET ALL LOCATIONS
+app.get('/api/locations', async(req, res) => {
+    let conn;
+    try{
+        console.log("requete get locations")
+        conn = await pool.getConnection();
+        const rows = await conn.query("SELECT * FROM locations");
+        res.status(200).json(rows);
+    }
+    catch(err){
+        console.log("Erreur" + err);
+    }
+});
+
+//GET LOCATION BY ID
+app.get('/api/locations/:id', async(req, res) => {
+    let conn;
+    let id = req.params.id;
+    try{
+        console.log("requete get locations/id")
+        conn = await pool.getConnection();
+        const rows = await conn.query("SELECT * FROM locations WHERE idL = ?", id);
+        res.status(200).json(rows);
+    }
+    catch(err){
+        console.log("Erreur" + err);
+    }
+});
+
+//CREATE LOCATION
+app.post('/api/locations/create', async(req, res) => {
+    let conn;
+    try{
+        console.log("requete post locations")
+        conn = await pool.getConnection();
+        const rows = await conn.query("INSERT INTO locations (dateDebutL, dateFinL, idU, idJ) VALUES (?, ?, ?, ?)", [req.body.dateDebutL, req.body.dateFinL, req.body.idU, req.body.idJ])
+        console.log(rows.affectedRows);
+        res.status(200).json(rows.affectedRows);
+    }
+    catch(err){
+        console.log("Erreur" + err);
+    }
+});
+
+//UPDATE LOCATION
+app.put('/api/locations/update/:id', async(req, res) => {
+    let conn;
+    let id = req.params.id;
+    try{
+        console.log("requete put locations/id")
+        conn = await pool.getConnection();
+        const rows = await conn.query("UPDATE locations SET dateDebutL = ?, dateFinL = ?, idU = ?, idJ = ? WHERE idL = ?", [req.body.dateDebutL, req.body.dateFinL, req.body.idU, req.body.idJ, id])
+        console.log(rows.affectedRows);
+        res.status(200).json(rows.affectedRows);
+    }
+    catch(err){
+        console.log("Erreur" + err);
+    }
+});
+
+//DELETE LOCATION
+app.delete('/api/locations/delete/:id', async(req, res) => {
+    let conn;
+    let id = req.params.id;
+    try{
+        console.log("requete delete locations/id")
+        conn = await pool.getConnection();
+        const rows = await conn.query("DELETE FROM locations WHERE idL = ?", id)
+        console.log(rows.affectedRows);
+        res.status(200).json(rows.affectedRows);
+    }
+    catch(err){
+        console.log("Erreur" + err);
+    }
+});
+
+
+
+
 app.listen(3001, () => console.log('Server running on port 3001'));  // set the port to listen

@@ -17,6 +17,9 @@ function App() {
       <Routes>
           {/* LA PAGE PRINCIPALE */}
           <Route path="/" element={<MenuNonConnecte/>} />
+
+          {/* CONNEXION / INSCRIPTION */}
+          <Route path="/connexion" element={<MenuNonConnecte/>} />
       </Routes>
       
 
