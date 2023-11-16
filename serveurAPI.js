@@ -55,7 +55,7 @@ app.post('/api/utilisateurs/create', async(req, res) => {
         .then( async (hash) => {
             console.log("requete post utilisateurs")
             conn = await pool.getConnection();
-            const rows = await conn.query("INSERT INTO utilisateurs (nomU, prenomU, emailU, mdpU) VALUES (?, ?, ?, ?)", [req.body.nomU, req.body.prenomU, req.body.emailU, hash])
+            const rows = await conn.query("INSERT INTO utilisateurs (nomU, prenomU, mailU, mdpU) VALUES (?, ?, ?, ?)", [req.body.nomU, req.body.prenomU, req.body.mailU, hash])
             console.log(rows.affectedRows);
             res.status(200).json(rows.affectedRows);
         }
@@ -63,14 +63,14 @@ app.post('/api/utilisateurs/create', async(req, res) => {
 });
 
 //USER CONNECTION
-app.get('/api/utilisateurs/connexion/:email/:mdp', async(req, res) => {
+app.get('/api/utilisateurs/connexion/:mail/:mdp', async(req, res) => {
     let conn;
-    let email = req.params.email;
+    let mail = req.params.mail;
     let mdp = req.params.mdp;
     try{
-        console.log("requete get utilisateurs/email/mdp")
+        console.log("requete get utilisateurs/mail/mdp")
         conn = await pool.getConnection();
-        const rows = await conn.query("SELECT * FROM utilisateurs WHERE emailU = ?", email);
+        const rows = await conn.query("SELECT * FROM utilisateurs WHERE mailU = ?", mail);
         if(rows.length > 0){
             bcrypt.compare(mdp, rows[0].mdpU)
             .then(valid => {
@@ -83,7 +83,7 @@ app.get('/api/utilisateurs/connexion/:email/:mdp', async(req, res) => {
             })
             .catch(error => res.status(500).json({error}));
         }else{
-            res.status(404).json({message: "Invalid email"});
+            res.status(404).json({message: "Invalid mail"});
         }
     }
     catch(err){
@@ -98,7 +98,7 @@ app.put('/api/utilisateurs/update/:id', async(req, res) => {
     try{
         console.log("requete put utilisateurs/id")
         conn = await pool.getConnection();
-        const rows = await conn.query("UPDATE utilisateurs SET nomU = ?, prenomU = ?, emailU = ?, mdpU = ? WHERE idU = ?", [req.body.nomU, req.body.prenomU, req.body.emailU, req.body.mdpU, id])
+        const rows = await conn.query("UPDATE utilisateurs SET nomU = ?, prenomU = ?, mailU = ?, mdpU = ? WHERE idU = ?", [req.body.nomU, req.body.prenomU, req.body.mailU, req.body.mdpU, id])
         console.log(rows.affectedRows);
         res.status(200).json(rows.affectedRows);
     }
@@ -278,8 +278,6 @@ app.delete('/api/locations/delete/:id', async(req, res) => {
         console.log("Erreur" + err);
     }
 });
-
-
 
 
 app.listen(3001, () => console.log('Server running on port 3001'));  // set the port to listen

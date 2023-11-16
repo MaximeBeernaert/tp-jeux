@@ -6,6 +6,10 @@ import Header from './Components/Body/Header';
 import Footer from './Components/Body/Footer';
 import MenuNonConnecte from './Components/Body/MenuNonConnecte';
 
+import ConnexionUtilisateur from './Components/Connexion/ConnexionUtilisateur';
+import CreationUtilisateur from './Components/Connexion/CreationUtilisateur';
+import ListeUtilisateurs from './Components/Connexion/ListeUtilisateurs';
+
 
 function App() {
   return (
@@ -19,7 +23,12 @@ function App() {
           <Route path="/" element={<MenuNonConnecte/>} />
 
           {/* CONNEXION / INSCRIPTION */}
-          <Route path="/connexion" element={<MenuNonConnecte/>} />
+          <Route path="/login" element={<ConnexionUtilisateur/>} />
+          <Route path="/signin" element={<CreationUtilisateur/>} />
+
+          {/* VOIR LES UTILISATEURS (MENU ADMIN, à retirer en production) */}
+          <Route path="/users" element={<ListeUtilisateurs/>} />
+          
       </Routes>
       
 
