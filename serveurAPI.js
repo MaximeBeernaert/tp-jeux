@@ -14,7 +14,7 @@ const pool = mariadb.createPool({
     database: process.env.DB_DTB,
     user: process.env.DB_USER,
     password: process.env.DB_PWD,
-    connectionLimit: 100
+    connectionLimit: 1000
 });
 
 // ---USER ROUTES---
@@ -31,6 +31,13 @@ app.get('/api/utilisateurs', async(req, res) => {
     catch(err){
         console.log("Erreur" + err);
     }
+
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
+    }
 });
 
 //GET USER BY ID
@@ -46,6 +53,13 @@ app.get('/api/utilisateurs/:id', async(req, res) => {
     catch(err){
         console.log("Erreur" + err);
     }
+
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
+    }
 });
 
 //CREATE USER
@@ -59,7 +73,8 @@ app.post('/api/utilisateurs/create', async(req, res) => {
             console.log(rows.affectedRows);
             res.status(200).json(rows.affectedRows);
         }
-        ).catch(error => res.status(500).json({error}));
+    ).catch(error => res.status(500).json({error}));
+    
 });
 
 //USER CONNECTION
@@ -89,6 +104,13 @@ app.get('/api/utilisateurs/connexion/:mail/:mdp', async(req, res) => {
     catch(err){
         console.log("Erreur" + err);
     } 
+
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
+    }
 });
 
 //UPDATE USER
@@ -105,6 +127,13 @@ app.put('/api/utilisateurs/update/:id', async(req, res) => {
     catch(err){
         console.log("Erreur" + err);
     }
+
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
+    }
 });
 
 //DELETE USER
@@ -120,6 +149,13 @@ app.delete('/api/utilisateurs/delete/:id', async(req, res) => {
     }
     catch(err){
         console.log()
+    } 
+
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
     }
 });
 
@@ -137,6 +173,13 @@ app.get('/api/jeux', async(req, res) => {
     catch(err){
         console.log("Erreur" + err);
     }
+
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
+    }
 });
 
 //GET JEUX BY ID
@@ -152,6 +195,13 @@ app.get('/api/jeux/:id', async(req, res) => {
     catch(err){
         console.log("Erreur" + err);
     }
+
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
+    }
 });
 
 //CREATE JEUX
@@ -166,6 +216,13 @@ app.post('/api/jeux/create', async(req, res) => {
     }
     catch(err){
         console.log("Erreur" + err);
+    }
+
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
     }
 });
 
@@ -183,6 +240,13 @@ app.put('/api/jeux/update/:id', async(req, res) => {
     catch(err){
         console.log("Erreur" + err);
     }
+
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
+    }
 });
 
 //DELETE JEUX
@@ -198,6 +262,13 @@ app.delete('/api/jeux/delete/:id', async(req, res) => {
     }
     catch(err){
         console.log("Erreur" + err);
+    }
+
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
     }
 });
 
@@ -215,6 +286,13 @@ app.get('/api/locations', async(req, res) => {
     catch(err){
         console.log("Erreur" + err);
     }
+
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
+    }
 });
 
 //GET LOCATION BY ID
@@ -230,6 +308,13 @@ app.get('/api/locations/:id', async(req, res) => {
     catch(err){
         console.log("Erreur" + err);
     }
+
+     //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
+    }
 });
 
 //CREATE LOCATION
@@ -244,6 +329,13 @@ app.post('/api/locations/create', async(req, res) => {
     }
     catch(err){
         console.log("Erreur" + err);
+    }
+
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
     }
 });
 
@@ -261,6 +353,13 @@ app.put('/api/locations/update/:id', async(req, res) => {
     catch(err){
         console.log("Erreur" + err);
     }
+
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
+    }
 });
 
 //DELETE LOCATION
@@ -276,6 +375,13 @@ app.delete('/api/locations/delete/:id', async(req, res) => {
     }
     catch(err){
         console.log("Erreur" + err);
+    }
+
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
     }
 });
 

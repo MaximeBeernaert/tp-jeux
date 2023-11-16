@@ -9,6 +9,7 @@ import MenuNonConnecte from './Components/Body/MenuNonConnecte';
 import ConnexionUtilisateur from './Components/Connexion/ConnexionUtilisateur';
 import CreationUtilisateur from './Components/Connexion/CreationUtilisateur';
 import ListeUtilisateurs from './Components/Connexion/ListeUtilisateurs';
+import ListeJeux from './Components/Jeux/ListeJeux';
 
 
 function App() {
@@ -28,7 +29,9 @@ function App() {
 
           {/* VOIR LES UTILISATEURS (MENU ADMIN, à retirer en production) */}
           <Route path="/users" element={<ListeUtilisateurs/>} />
-          
+
+          {/* LISTE DES JEUX */}
+          <Route path="/gamelist" element={<ListeJeux/>} />
       </Routes>
       
 
