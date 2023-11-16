@@ -1,23 +1,27 @@
-import logo from './logo.svg';
+import { Routes, Route } from 'react-router-dom';
+
 import './App.css';
+
+import Header from './Components/Body/Header';
+import Footer from './Components/Body/Footer';
+import MenuNonConnecte from './Components/Body/MenuNonConnecte';
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* HEADER QUI SERA MIS SUR TOUTES LES PAGES */}
+      <Header/>
+
+      {/* ROUTES */}
+      <Routes>
+          {/* LA PAGE PRINCIPALE */}
+          <Route path="/" element={<MenuNonConnecte/>} />
+      </Routes>
+      
+
+      {/* FOOTER QUI SERA MIS SUR TOUTES LES PAGES */}
+      <Footer/>
     </div>
   );
 }
