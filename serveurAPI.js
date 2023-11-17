@@ -210,7 +210,7 @@ app.get('/api/recent', async(req, res) => {
     try{
         console.log("requete get jeux/recent")
         conn = await pool.getConnection();
-        const rows = await conn.query("SELECT * FROM jeux ORDER BY anneeJ DESC LIMIT 6");
+        const rows = await conn.query("SELECT * FROM jeux ORDER BY anneeJ DESC LIMIT 10");
         res.status(200).json(rows);
     }
     catch(err){

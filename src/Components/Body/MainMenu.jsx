@@ -27,16 +27,15 @@ export default function MenuNonConnecte() {
             Tendances 
           </div>
           <div className='main-page-categorie-desc main-page-tendance-desc'>
-            Découvrez les jeux les plus tendance du moment
+            Découvrez les jeux les plus tendance 
           </div>
           <div className='main-page-categorie-list main-page-tendance-list'>
-            {jeuxRecents.map( (jeu,i) =>{ 
-              // console.log(jeu.idJ);
+            {jeuxRecents.map( (jeu,i) =>
               <div className='cartes-jeux'>
-                  <CarteJeux idJ={jeu.idJ}/>
+                  <CarteJeux idJ={i+1}/>
               </div>
-            })}
-          </div>
+            )}
+        </div>  
           <div className='main-page-categorie-list main-page-ventes-list'>
             {/* gl div purement visuelle*/}
           </div>
@@ -47,7 +46,7 @@ export default function MenuNonConnecte() {
             Meilleurs notes
           </div>
           <div className='main-page-categorie-desc main-page-note-desc'>
-            Découvrez les jeux les mieux notés du moment
+            Les jeux les mieux notés
           </div>
           <div className='main-page-categorie-list main-page-note-list'>
             {/* gl */}
@@ -62,7 +61,7 @@ export default function MenuNonConnecte() {
             Meilleures ventes
           </div>
           <div className='main-page-categorie-desc main-page-ventes-desc'>
-            Découvrez les jeux les plus loués du moment
+            Les jeux les plus loués du moment
           </div>
           <div className='main-page-categorie-list main-page-ventes-list'>
             {/* gl */}
