@@ -1,0 +1,15 @@
+      <div className='carte-jeux-titre'>
+          {jeux.titreJ}
+        </div>
+        <div className='carte-jeux-editeur'>
+          {jeux.editeurJ}
+        </div>
+        <div className='carte-jeux-anne'>
+          {jeux.anneJ}
+        </div>
+        <div className='carte-jeux-desc'>
+          {jeux.descJ}
+        </div>
+        <div className='carte-jeux-prix'>
+          {jeux.prixJ + " €"}
+        </div>

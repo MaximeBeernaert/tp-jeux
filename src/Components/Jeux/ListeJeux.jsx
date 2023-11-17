@@ -19,8 +19,18 @@ export default function ListeJeux() {
     }, [jeux]);
 
   return (
-    <div>
-      ListeJeux
+    <div className='main-page'>
+      <div className='main-liste-jeux'>
+        <div className='main-liste-jeux-titre'>
+          Liste des jeux
+        </div>
+        <div className='main-liste-jeux-desc'>
+          Découvrez notre liste de jeux disponible à la location
+        </div>
+        <div className='main-liste-jeux-list'>
+        </div>
+      </div>
+      Nos jeux disponibles
       <div className='liste-jeux'>
           {jeux.map( (jeu,i) =>
               <div className='cartes-jeux'>

@@ -14,7 +14,7 @@ const pool = mariadb.createPool({
     database: process.env.DB_DTB,
     user: process.env.DB_USER,
     password: process.env.DB_PWD,
-    connectionLimit: 1000
+    connectionLimit: 10
 });
 
 // ---USER ROUTES---
@@ -204,6 +204,26 @@ app.get('/api/jeux/:id', async(req, res) => {
     }
 });
 
+//GET 6 MOST RECENT GAMES
+app.get('/api/recent', async(req, res) => {
+    let conn;
+    try{
+        console.log("requete get jeux/recent")
+        conn = await pool.getConnection();
+        const rows = await conn.query("SELECT * FROM jeux ORDER BY anneeJ DESC LIMIT 6");
+        res.status(200).json(rows);
+    }
+    catch(err){
+        console.log("Erreur" + err);
+    }
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+});
+
 //CREATE JEUX
 app.post('/api/jeux/create', async(req, res) => {
     let conn;
@@ -271,6 +291,9 @@ app.delete('/api/jeux/delete/:id', async(req, res) => {
         }
     }
 });
+
+
+
 
 // ---LOCATION ROUTES---
 

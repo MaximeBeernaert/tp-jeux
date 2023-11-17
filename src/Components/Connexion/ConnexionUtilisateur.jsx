@@ -13,6 +13,7 @@ export default function ConnexionUtilisateur() {
             axios.get(url + params)
                 .then(res => {
                     localStorage.setItem('user', JSON.stringify(res.data.user.idU))
+                    window.location.href = "/";
                 })  
                 .catch(err => console.error(err))
             ;
