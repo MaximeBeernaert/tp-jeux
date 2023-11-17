@@ -10,10 +10,12 @@ import ConnexionUtilisateur from './Components/Connexion/ConnexionUtilisateur';
 import CreationUtilisateur from './Components/Connexion/CreationUtilisateur';
 import ListeUtilisateurs from './Components/Connexion/ListeUtilisateurs';
 import ListeJeux from './Components/Jeux/ListeJeux';
-import Card from './Components/Card/Card';
+import Panier from './Components/Panier/Panier';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';
+import Recherche from './Components/Recherche/Recherche';
+import MesLocations from './Components/Jeux/MesLocations';
 
 
 function App() {
@@ -55,7 +57,13 @@ function App() {
           <Route path="/gamelist" element={<ListeJeux/>} />
 
           {/* PANIER */}
-          <Route path="/card" element={<Card/>} />
+          <Route path="/card" element={<Panier/>} />
+
+          {/* RECHERCHE */}
+          <Route path="/search" element={<Recherche/>} />
+
+          {/* MES LOCATIONS */}
+          <Route path="/mygames" element={<MesLocations/>} />
       </Routes>
       
 

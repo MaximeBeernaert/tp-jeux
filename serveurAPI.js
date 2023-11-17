@@ -204,13 +204,13 @@ app.get('/api/jeux/:id', async(req, res) => {
     }
 });
 
-//GET 6 MOST RECENT GAMES
-app.get('/api/recent', async(req, res) => {
+// GET JEUX BY BEST RATING
+app.get('/api/jeux/best', async(req, res) => {
     let conn;
     try{
-        console.log("requete get jeux/recent")
+        console.log("requete get jeux/best")
         conn = await pool.getConnection();
-        const rows = await conn.query("SELECT * FROM jeux ORDER BY anneeJ DESC LIMIT 10");
+        const rows = await conn.query("SELECT * FROM jeux ORDER BY noteJ DESC LIMIT 9");
         res.status(200).json(rows);
     }
     catch(err){
@@ -223,6 +223,51 @@ app.get('/api/recent', async(req, res) => {
         }
     }
 });
+
+
+//GET 6 MOST RECENT GAMES
+app.get('/api/recent', async(req, res) => {
+    let conn;
+    try{
+        console.log("requete get jeux/recent")
+        conn = await pool.getConnection();
+        const rows = await conn.query("SELECT * FROM jeux ORDER BY anneeJ DESC LIMIT 9");
+        res.status(200).json(rows);
+    }
+    catch(err){
+        console.log("Erreur" + err);
+    }
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+});
+
+// SEARCH GAMES
+
+app.get('/api/jeux/search/:search', async(req, res) => {
+    let conn;
+    let search = req.params.search;
+    try{
+        console.log("requete get jeux/search")
+        conn = await pool.getConnection();
+        const rows = await conn.query("SELECT * FROM jeux WHERE titreJ LIKE ? OR descJ LIKE ? OR anneeJ LIKE ? OR editeurJ LIKE ? ORDER BY anneeJ DESC LIMIT 9", ["%"+search+"%", "%"+search+"%", "%"+search+"%", "%"+search+"%"]);
+        res.status(200).json(rows);
+    }
+    catch(err){
+        console.log("Erreur" + err);
+    }
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+});
+
+
 
 //CREATE JEUX
 app.post('/api/jeux/create', async(req, res) => {
@@ -292,9 +337,6 @@ app.delete('/api/jeux/delete/:id', async(req, res) => {
     }
 });
 
-
-
-
 // ---LOCATION ROUTES---
 
 //GET ALL LOCATIONS
@@ -340,13 +382,61 @@ app.get('/api/locations/:id', async(req, res) => {
     }
 });
 
+//GET LOCATION BY USER ID
+app.get('/api/locations/user/:idU', async (req, res) => {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+      const idU = req.params.idU;
+      const query = `
+        SELECT l.*, j.titreJ, j.editeurJ, j.anneeJ, j.descJ, j.prixJ
+        FROM locations l
+        JOIN jeux j ON l.idJ = j.idJ
+        WHERE l.idU = ?
+      `;
+      const rows = await conn.query(query, [idU]);
+      res.json(rows);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Server error');
+    } finally {
+      if (conn) conn.release();
+    }
+  });
+  
+// GET 9 GAMES MOST RENTED
+app.get('/api/mostrented', async(req, res) => {
+    let conn;
+    try{
+        console.log("requete get locations/mostrented")
+        conn = await pool.getConnection();
+        const rows = await conn.query("SELECT j.idJ FROM jeux j JOIN locations l ON j.idJ = l.idJ GROUP BY j.idJ ORDER BY COUNT(*) DESC LIMIT 9");
+        let array = [];
+        rows.forEach(element => {
+            array.push(element.idJ);
+        });
+        res.status(200).json(array);
+    }
+    catch(err){
+        console.log("Erreur" + err);
+    }
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+});
+
+
+
 //CREATE LOCATION
 app.post('/api/locations/create', async(req, res) => {
     let conn;
     try{
         console.log("requete post locations")
         conn = await pool.getConnection();
-        const rows = await conn.query("INSERT INTO locations (dateDebutL, dateFinL, idU, idJ) VALUES (?, ?, ?, ?)", [req.body.dateDebutL, req.body.dateFinL, req.body.idU, req.body.idJ])
+        const rows = await conn.query("INSERT INTO locations (empruntL, renduL, idU, idJ) VALUES (?, ?, ?, ?)", [req.body.empruntL, req.body.renduL, req.body.idU, req.body.idJ])
         console.log(rows.affectedRows);
         res.status(200).json(rows.affectedRows);
     }
@@ -369,7 +459,7 @@ app.put('/api/locations/update/:id', async(req, res) => {
     try{
         console.log("requete put locations/id")
         conn = await pool.getConnection();
-        const rows = await conn.query("UPDATE locations SET dateDebutL = ?, dateFinL = ?, idU = ?, idJ = ? WHERE idL = ?", [req.body.dateDebutL, req.body.dateFinL, req.body.idU, req.body.idJ, id])
+        const rows = await conn.query("UPDATE locations SET empruntL = ?, renduL = ?, idU = ?, idJ = ? WHERE idL = ?", [req.body.empruntL, req.body.renduL, req.body.idU, req.body.idJ, id])
         console.log(rows.affectedRows);
         res.status(200).json(rows.affectedRows);
     }

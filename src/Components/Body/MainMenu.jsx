@@ -1,47 +1,67 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import CarteJeux from '../Jeux/CarteJeux';
+import { Box } from '@mui/material';
 
-export default function MenuNonConnecte() {
+export default function MainMenu() {
 
-  let url = "http://localhost:3001/api/recent";
+  let url = "http://localhost:3001/api/";
   const [jeuxRecents, setJeuxRecents] = useState([]);
+  const [jeuxNotes, setJeuxNotes] = useState([]);
+  const [jeuxVentes, setJeuxVentes] = useState([]);
 
   useEffect(() => {
       const fetchRecentGames = () => {
-          axios.get(url)
+          axios.get(url+"recent")
             .then(res => {
               setJeuxRecents(res.data);
             })
             .catch(err => console.error(err));
         };
+      const fetchMostRentedGames = () => {
+        axios.get(url+"mostrented")
+          .then(res => {
+            setJeuxVentes(res.data);
+          })
+          .catch(err => console.error(err));
+      }
+      const fetchBestRatedGames = () => {
+        axios.get(url+"jeux/best")
+          .then(res => {
+            setJeuxNotes(res.data);
+          })
+          .catch(err => console.error(err));
+      }
       fetchRecentGames();
-  }, [jeuxRecents]);
-
-
+      fetchMostRentedGames();
+      fetchBestRatedGames();
+  }, [jeuxRecents, jeuxVentes, jeuxNotes]);
 
     return (
+      
     <div className='main-page'>
-        <div className='main-page-categorie main-page-tendance' name="lastgames" id="lastgames">
+        <Box className='main-page-categorie main-page-tendance' name="lastgames" id="lastgames" sx={{ bgcolor: 'primary.light', color: 'primary.dark'}}>
           <div className='main-page-categorie-titre main-page-tendance-titre' >
-            Tendances 
+            Tendances
           </div>
           <div className='main-page-categorie-desc main-page-tendance-desc'>
             Découvrez les jeux les plus tendance 
           </div>
           <div className='main-page-categorie-list main-page-tendance-list'>
-            {jeuxRecents.map( (jeu,i) =>
-              <div className='cartes-jeux'>
-                  <CarteJeux idJ={i+1}/>
+            {jeuxRecents != [] 
+            ?
+              jeuxRecents.map( (jeu,i) =>
+              <CarteJeux idJ={i+1}/>
+              )
+            :
+              <div className='main-page-categorie-list-text'>
+                  Pas de jeux récents
               </div>
-            )}
-        </div>  
-          <div className='main-page-categorie-list main-page-ventes-list'>
-            {/* gl div purement visuelle*/}
+            }  
           </div>
-        </div>
+        </Box>
 
-        <div className='main-page-categorie main-page-note' name="bestrates" id="bestrates">
+        <Box className='main-page-categorie main-page-note' name="bestrates" id="bestrates" sx={{ bgcolor: 'primary.main', color: 'primary.dark'}}>
           <div className='main-page-categorie-titre main-page-note-titre'>
             Meilleurs notes
           </div>
@@ -49,14 +69,20 @@ export default function MenuNonConnecte() {
             Les jeux les mieux notés
           </div>
           <div className='main-page-categorie-list main-page-note-list'>
-            {/* gl */}
+            {jeuxNotes.length !== 0
+            ?
+              jeuxNotes.map( (jeu,i) =>
+                <CarteJeux idJ={i+1}/>
+              )
+            :
+              <div className='main-page-categorie-list-text'>
+                  Pas de jeux notés
+              </div>
+            }
           </div>
-          <div className='main-page-categorie-list main-page-ventes-list'>
-            {/* gl div purement visuelle*/}
-          </div>
-        </div>
+        </Box>
 
-        <div className='main-page-categorie main-page-ventes' name="bestsales" id="bestsales">
+        <Box className='main-page-categorie main-page-ventes' name="bestsales" id="bestsales" sx={{ bgcolor: 'primary.light', color: 'primary.dark'}}>
           <div className='main-page-categorie-titre main-page-ventes-titre'>
             Meilleures ventes
           </div>
@@ -64,12 +90,18 @@ export default function MenuNonConnecte() {
             Les jeux les plus loués du moment
           </div>
           <div className='main-page-categorie-list main-page-ventes-list'>
-            {/* gl */}
+            {jeuxVentes.length !== 0 
+            ?
+              jeuxVentes.map( (jeu,i) =>
+                <CarteJeux idJ={i+1}/>
+              )
+            :
+              <div className='main-page-categorie-list-text'>
+                  Pas de meilleures ventes
+              </div>
+            }
           </div>
-          <div className='main-page-categorie-list main-page-ventes-list'>
-            {/* gl div purement visuelle*/}
-          </div>
-        </div>
+        </Box>
     </div>
   )
 }

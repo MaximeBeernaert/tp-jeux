@@ -21,15 +21,70 @@ body{
 .carte-jeux{
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin: 10px;
-  width: 200px;
-  height: 300px;
+  width: 350px;
+  height: 200px;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
   transition: all 0.3s ease-in-out;
+}
+.carte-jeux-items{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  width:100%;
+  
+}
+.carte-jeux-text{
+  height: 20%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 10px;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.carte-jeux-modal-child{
+  width: 500px;
+  height:500px;
+}
+.carte-jeux-modal-box{
+  width: 100%;
+  height:400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  background-color: aqua;
+  padding: 10px;
+}
+.carte-jeux-modal{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.carte-jeux-modal-titre{
+  font-size: 30px;
+}
+.carte-jeux-modal-editeur{
+  font-size: 20px;
+}
+.carte-jeux-modal-actions{
+  width: 100%;
+  padding: 10px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  background-color: aliceblue;
+}
+
+.carte-jeux-prix{
+  font-size: 25px;
 }
 
 .header-mainmenu{
@@ -114,19 +169,11 @@ body{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.main-page-tendance, .main-page-ventes{
-  background-color:  #39796b;
-}
-
-.main-page-note{
-  background-color: #004d40;
+  min-height: 80vh;
 }
 
 .main-page-categorie{
-  padding : 0 10em;
-  width: 80%;
+  width: 100%;
 }
 
 .main-page-categorie-titre{
@@ -145,9 +192,38 @@ body{
 
 .main-page-categorie-list{
   margin : 10px;
-  /* width: 100%; */
+  min-height: 200px;
   display: flex;
   flex-wrap:wrap;
   flex-direction: row;
   justify-content: space-around;
+  align-items: center;
+  padding: 0 40px 40px 40px;
+}
+
+.main-page-categorie-list-text{
+  font-size: 28px;
+}
+
+.header-user-split{
+  width: 50%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.header-link-icon{
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.empty-basket{
+  width: 60%;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }

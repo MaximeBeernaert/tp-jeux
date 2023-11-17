@@ -4,11 +4,15 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 
 import Button from '@mui/material/Button';
+import LogoutIcon from '@mui/icons-material/Logout';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import IconButton from '@mui/material/IconButton';
 
 function Header() {
 
   const [isConnected, setIsConnected] = useState(false)
   let currentURL = window.location.href;
+  let url = window.location.href.replace(window.location.hash,"");
 
   useEffect(() => {
     // check if user is connected or not
@@ -32,11 +36,14 @@ function Header() {
         break;
     }
   }
-
-
   const scrollToHash = (hashName) => {         
     window.location.href = "http://localhost:3000/#" + hashName;     
   }
+
+  const searchGame = (search) => {
+    window.location.href = "http://localhost:3000/search/#" + search;
+  }
+
 
   return (
     <div className={(currentURL == "http://localhost:3000/" || currentURL == "http://localhost:3000/#lastgames" || currentURL == "http://localhost:3000/#bestsales" || currentURL == "http://localhost:3000/#bestrates") ? 'header-mainmenu' : 'header-othermenu'} >
@@ -54,31 +61,40 @@ function Header() {
 
           </div>
         <div className='header-div-split header-user'>
-          {/* If user is connected */}
-          {isConnected ? (
-                <>
-                <Button className="header-link-button header-link-card" href="/card" sx={{ bgcolor: 'primary.light', color: 'primary.dark'}} size="small">Mon panier</Button>
-                <Button className="header-link-button header-link-logout" sx={{ bgcolor: 'primary.light', color: 'primary.dark'}} size="small"
-                    onClick={() => {
-                    localStorage.removeItem("user");
-                    localStorage.removeItem("card");
-                    window.location.href = "/";
-                    }}
-                >Se déconnecter</Button>
-                </>
-                ) : (
+          <div className='header-user-split'>
+            {/* If user is connected */}
+            {isConnected ? (
                   <>
-                  <Button className="header-link-button header-link-login" href="/signin" sx={{ bgcolor: 'primary.light', color: 'primary.dark'}} size="small">Créer un compte</Button>
-                  <Button className="header-link-button header-link-signin" href="/login" sx={{ bgcolor: 'primary.light', color: 'primary.dark'}} size="small">Se connecter</Button>
+                  <Button className="header-link-button header-link-card" href="/mygames" sx={{ bgcolor: 'primary.light', color: 'primary.dark'}} size="small">Mes Jeux</Button>
+                  <IconButton className="header-link-button header-link-icon header-link-card" href="/card" sx={{ color: 'primary.dark'}} size="small">
+                    <ShoppingCartIcon/> 
+                  </IconButton>
+                  <IconButton className="header-link-button header-link-icon header-link-logout" sx={{ color: 'primary.dark'}} size="small"
+                      onClick={() => {
+                      localStorage.removeItem("user");
+                      localStorage.removeItem("card");
+                      window.location.href = "/";
+                      }}
+                  >
+                    <LogoutIcon />
+                  </IconButton>
                   </>
-                )}
+                  ) : (
+                    <>
+                    <Button className="header-link-button header-link-login" href="/signin" sx={{ bgcolor: 'primary.light', color: 'primary.dark'}} size="small">Créer un compte</Button>
+                    <Button className="header-link-button header-link-signin" href="/login" sx={{ bgcolor: 'primary.light', color: 'primary.dark'}} size="small">Se connecter</Button>
+                    </>
+                  )}
+          </div>
         </div>
       </div>
-      <div className='header-search'>
+      { (url === "http://localhost:3000/search/" || url === "http://localhost:3000/signin" || url === "http://localhost:3000/login" || url === "http://localhost:3000/mygames" ) ? '' :
+        <div className='header-search'>
           <Box component="form" sx={{'& > :not(style)': { m: 1, width: '25ch' }, }} noValidate autoComplete="off" >
-            <TextField id="outlined-basic" label="Recherche" variant="outlined" />
+            <TextField id="outlined-basic" label="Recherche" variant="outlined"  onInput={ e=>searchGame(e.target.value)}/>
           </Box>  
         </div>
+      }
         {scrollSwitch()}
     </div>
     

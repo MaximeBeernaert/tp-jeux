@@ -5,7 +5,6 @@ import CarteJeux from './CarteJeux';
 export default function ListeJeux() {
     let url = "http://localhost:3001/api/jeux";
     const [jeux, setJeux] = useState([]);
-    const [index, setIndex] = useState(0);
 
     useEffect(() => {
         const fetchJeux = () => {
@@ -33,9 +32,7 @@ export default function ListeJeux() {
       Nos jeux disponibles
       <div className='liste-jeux'>
           {jeux.map( (jeu,i) =>
-              <div className='cartes-jeux'>
-                  <CarteJeux idJ={i+1}/>
-              </div>
+              <CarteJeux idJ={i+1}/>
           )}
       </div>
     </div>

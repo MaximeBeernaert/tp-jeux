@@ -13,3 +13,15 @@
         <div className='carte-jeux-prix'>
           {jeux.prixJ + " €"}
         </div>
+
+
+
+                      axios.post("http://localhost:3001/api/locations/create", jeuxDansPanier)
+                .then(res => {
+                  console.log(res);
+                  // Suppression du panier
+                  localStorage.removeItem('card');
+                  // Redirection vers la page de mes locations
+                  window.location.href = "/mygames";
+                })
+                .catch(err => console.error(err));

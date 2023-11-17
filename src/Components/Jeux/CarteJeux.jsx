@@ -1,12 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, Tooltip } from '@mui/material';
+import { Button, Tooltip, Alert, TextField, Snackbar, Modal, Box, Typography, Rating } from '@mui/material';
+
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import { format } from 'date-fns';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 export default function CarteJeux({ idJ }) {
+
   const url = "http://localhost:3001/api/jeux/";
+  
+  //Game details
   const [jeux, setJeux] = useState({});
   const [isAvailable, setIsAvailable] = useState(false);
+
+  //User connection
   const [isUserConnected, setIsUserConnected] = useState(false);
+
+  //Rent date
+  const empruntL = useState(new Date()); //Today
+  const [renduL, setRenduL] = useState(null); //Selected date by user
+
+  //Calendars display
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  // Modal display
+  const [openModal, setOpenModal] = useState(false);
+
+  //Get if the current iser have already rent this game
+  const [locations, setLocations] = useState([]);
+  const [isAlreadyRent, setIsAlreadyRent] = useState(false);
+
+  //User feedback
+  const [noteL, setNoteL] = React.useState(2);
 
   useEffect(() => {
     setIsUserConnected(localStorage.getItem('user') !== null);
@@ -15,63 +45,240 @@ export default function CarteJeux({ idJ }) {
       .then(res => {
         setJeux(res.data[0]);
         checkIfAvailable(res.data[0]);
+        getLocationsForCurrentUser();
       })
       .catch(err => console.error(err));
-  }, [idJ]);
+  }, [idJ, locations]);
 
+  //Check if game is already in card
   const checkIfAvailable = (jeu) => {
     const card = JSON.parse(localStorage.getItem('card')) || [];
     const isInCard = card.some(j => j.idJ === jeu.idJ);
     setIsAvailable(!isInCard);
   }
 
-  const addToCard = (idJ) => {
+  //Add game to card
+  const addToCard = (itemToAdd) => {
     const card = JSON.parse(localStorage.getItem('card')) || [];
-    if (!card.some(jeux => jeux.idJ === idJ)) {
-      card.push({ idJ });
-      localStorage.setItem('card', JSON.stringify(card));
-      setIsAvailable(false);
+    card.push(itemToAdd);
+    localStorage.setItem('card', JSON.stringify(card));
+    setIsAvailable(false);
+  }
+
+  //Confirm date and add game to card when user click on calendar
+  const confirmDateAndAddToCard = () => {
+
+    if (selectedDate) {
+      // Formater la date sélectionnée pour renduL
+      const formattedRenduL = format(selectedDate.toDate(), 'yyyy-MM-dd');
+
+      // Formater la date actuelle pour empruntL
+      const formattedEmpruntL = format(new Date(), 'yyyy-MM-dd');
+
+      const itemToAdd = {
+        idJ: jeux.idJ,
+        renduL: formattedRenduL,
+        empruntL: formattedEmpruntL
+      };
+  
+      addToCard(itemToAdd);
+      setShowCalendar(false);
+      setOpenSnackbar(true);
+    } else {
+      alert("Veuillez choisir une date de rendu.");
     }
   }
 
+  //Get locations for current user
+  const getLocationsForCurrentUser = async () => {
+    const idU = localStorage.getItem('user');
+    try {
+      const response = await axios.get(`http://localhost:3001/api/locations/user/${idU}`);
+      setLocations(response.data);
+      console.log("loc : ",response.data);
+    } catch (error) {
+      console.error(error);
+    }
+
+    //Check if current user have already rent this game
+    const isAlreadyRent = locations.some(l => l.idJ === jeux.idJ);
+    setIsAlreadyRent(isAlreadyRent);
+  };
+
+  //Stop rent for the current game
+  const stopRent = async (idL) => {
+    try {
+      const response = await axios.delete(`http://localhost:3001/api/locations/delete/${idL}`);
+      console.log(response);
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
+
+  //Display calendar when user click on rent button
+  const handleRentClick = () => {
+    setShowCalendar(true);
+  }
+
+  //Close calendar when user click on cancel button
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
+  // Afficher la modal avec les détails du jeu
+  const handleShowDetails = () => {
+    setOpenModal(true);
+  };
+  
+  // Fermer la modal
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  console.log(jeux);
+
+  // Style pour la modal
+  const style = {
+    
+    // p: 4,
+  };
+
   return (
-    <div className='carte-jeux'>
+    <div className='carte-jeux' onClick={handleShowDetails}>
       <div className='carte-jeux-items'>
-        {/* Détails du jeu */}
-        <div className='carte-jeux-titre'>
-          {jeux.titreJ}
+        <div className='carte-jeux-img'>
+          <div>img</div>
         </div>
-        <div className='carte-jeux-editeur'>
-          {jeux.editeurJ}
-        </div>
-        <div className='carte-jeux-anne'>
-          {jeux.anneJ}
-        </div>
-        <div className='carte-jeux-desc'>
-          {jeux.descJ}
-        </div>
-        <div className='carte-jeux-prix'>
-          {jeux.prixJ + " €"}
-        </div>
-        {/* Bouton Louer avec logique conditionnelle */}
-        <Tooltip 
-          title={!isUserConnected ? "Vous devez être connecté pour louer un jeu" : 
-                !isAvailable ? "Déjà dans le panier" : ""}
-          disableHoverListener={isUserConnected && isAvailable}
-        >
-          <span> {/* Span nécessaire pour Tooltip avec Button désactivé */}
-            <Button 
-              variant="outlined" 
-              color="success" 
-              size="small" 
-              onClick={() => addToCard(jeux.idJ)}
-              disabled={!isUserConnected || !isAvailable}
-            >
-              Louer
-            </Button>
-          </span>
-        </Tooltip>
+        <Box className='carte-jeux-text' sx ={{bgcolor:'secondary.main'}}>
+          {/* Détails du jeu */}
+          <div className='carte-jeux-titre'>
+            {jeux.titreJ}
+          </div>
+          <div className='carte-jeux-prix'>
+            {jeux.prixJ + " €"}
+          </div>
+        </Box>
       </div>
-    </div>
+      
+      
+        {/* Modal pour afficher les détails du jeu */}
+        <Modal
+          open={openModal}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+        >
+          <div className='carte-jeux-modal'>
+          <Box className='carte-jeux-modal-child'>
+            <div className='carte-jeux-modal-box'>
+              <div className='carte-jeux-modal-titre'>
+                {jeux.titreJ}
+              </div>
+              <div className='carte-jeux-modal-editeur'>
+                {jeux.editeurJ}
+              </div>
+              <div className='carte-jeux-modal-anne'>
+                {jeux.anneJ}
+              </div>
+              <div className='carte-jeux-modal-desc'>
+                {jeux.descJ}
+              </div>
+            </div>
+            <div className='carte-jeux-modal-actions'>
+              <div className='carte-jeux-modal-actions-prix'>
+                {jeux.prixJ + " €"}
+              </div>
+            </div>
+            
+
+              {/* Bouton Louer */}
+            <Tooltip 
+              title={!isUserConnected ? "Vous devez être connecté pour louer un jeu" : 
+                    isAlreadyRent ? "Vous avez déjà ce jeu dans votre bibliothèque" :
+                    !isAvailable ? "Déjà dans le panier" : ""}
+              disableHoverListener={isUserConnected && isAvailable}
+            >
+              <span>
+                <Button 
+                  variant="outlined" 
+                  color="success" 
+                  size="small" 
+                  onClick={handleRentClick}
+                  disabled={!isUserConnected || !isAvailable}
+                >
+                  Louer
+                </Button>
+              </span>
+
+              {isAlreadyRent ? <>
+
+                {/* Avis de la location */}
+
+                {/* Note de la location */}
+                <Box 
+                  sx={{
+                    '& > legend': { mt: 2 },
+                  }}
+                >
+                  <Typography component="legend">Votre note :</Typography>
+                  <Rating
+                    name="noteL"
+                    value={noteL}
+                    onChange={(noteL, setNoteL) => {
+                      setNoteL(noteL);
+                    }}
+                  />
+                </Box>
+
+                {/* Bouton pour arrêter la location */}
+                <Button
+                    variant="outlined"
+                    color="error"
+                    size="small"
+                    //onClick={stopRent(locations.find(l => l.idJ === jeux.idJ).idL)}
+                    >
+                    Arrêter la location
+                    </Button>
+              </> : <></>}
+            </Tooltip>
+
+            {/* Calendrier pour choisir une date */}
+            {showCalendar && (
+              <div className='carte-jeux-emprunt' title='Date de rendu'>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateCalendar
+                    label="Date de rendu"
+                    disablePast={true}
+                    value={selectedDate} 
+                    onChange={(newDate) => setSelectedDate(newDate)}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+                <Button 
+                  variant="outlined" 
+                  color="primary" 
+                  size="small"
+                  onClick={confirmDateAndAddToCard}
+                >
+                  Confirmer la date et ajouter au panier
+                </Button>
+              </div>
+            )}
+
+          </Box>
+          </div>
+        </Modal>
+
+        {/* Snackbar pour la notification */}
+        <Snackbar open={openSnackbar} autoHideDuration={5000} onClose={handleCloseSnackbar}>
+          <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+            Jeu ajouté au panier avec succes !
+          </Alert>
+        </Snackbar>
+      </div>
   );
 }
