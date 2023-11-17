@@ -31,3 +31,16 @@ CREATE TABLE `locations` (
   `noteL` int(11) DEFAULT NULL,
   PRIMARY KEY (`idL`)
 );
+
+
+INSERT INTO locations (idU, idJ, empruntL, renduL, commentL, noteL) VALUES
+(1, 1, '2023-01-10', '2023-01-15', "Excellent jeu, j'ai adoré!', 5),
+(2, 3, '2023-02-05', '2023-02-12', "Très addictif, je recommande', 4),
+(3, 5, '2023-03-20', '2023-03-25', 'Belle expérience de jeu', 4),
+(4, 8, '2023-04-15', '2023-04-22', 'Un classique incontournable', 5),
+(5, 10, '2023-05-01', '2023-05-08', 'Graphismes incroyables', 4),
+(6, 12, '2023-06-10', '2023-06-17', 'Un jeu de rôle captivant', 5),
+(7, 14, '2023-07-05', '2023-07-12', 'Pas mal, mais peut être amélioré', 3),
+(8, 16, '2023-08-20', '2023-08-27', 'Beaucoup de fun en multijoueur', 4),
+(9, 18, '2023-09-15', '2023-09-22', 'Scénario intrigant', 5),
+(10, 20, '2023-10-01', '2023-10-08', 'Un jeu de sport différent', 3);

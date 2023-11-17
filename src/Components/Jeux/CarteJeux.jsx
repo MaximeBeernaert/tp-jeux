@@ -6,7 +6,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { format } from 'date-fns';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 export default function CarteJeux({ idJ }) {
 
@@ -36,7 +35,10 @@ export default function CarteJeux({ idJ }) {
   const [isAlreadyRent, setIsAlreadyRent] = useState(false);
 
   //User feedback
-  const [noteL, setNoteL] = React.useState(2);
+  const [noteL, setNoteL] = React.useState(5);
+  const [commentL, setCommentL] = React.useState('');
+
+  const img = jeux.urlJ;
 
   useEffect(() => {
     setIsUserConnected(localStorage.getItem('user') !== null);
@@ -95,7 +97,6 @@ export default function CarteJeux({ idJ }) {
     try {
       const response = await axios.get(`http://localhost:3001/api/locations/user/${idU}`);
       setLocations(response.data);
-      console.log("loc : ",response.data);
     } catch (error) {
       console.error(error);
     }
@@ -139,27 +140,30 @@ export default function CarteJeux({ idJ }) {
     setOpenModal(false);
   };
 
-  console.log(jeux);
-
-  // Style pour la modal
-  const style = {
-    
-    // p: 4,
-  };
+  //Publish user feedback
+  const publishFeedback = async (idL, noteL, commentL) => {
+    try {
+      const reponse = await axios.post(`http://localhost:3001/api/locations/update/${idL}`)
+      console.log(reponse);
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <div className='carte-jeux' onClick={handleShowDetails}>
       <div className='carte-jeux-items'>
         <div className='carte-jeux-img'>
-          <div>img</div>
-        </div>
+          <img className='img-jeu-carte' src={jeux.imgJ} alt={jeux.titreJ} />
+        </div>        
         <Box className='carte-jeux-text' sx ={{bgcolor:'secondary.main'}}>
           {/* Détails du jeu */}
           <div className='carte-jeux-titre'>
             {jeux.titreJ}
           </div>
           <div className='carte-jeux-prix'>
-            {jeux.prixJ + " €"}
+            {jeux.prixJ + " €/j"}
           </div>
         </Box>
       </div>
@@ -173,103 +177,115 @@ export default function CarteJeux({ idJ }) {
           aria-describedby="modal-description"
         >
           <div className='carte-jeux-modal'>
-          <Box className='carte-jeux-modal-child'>
-            <div className='carte-jeux-modal-box'>
-              <div className='carte-jeux-modal-titre'>
-                {jeux.titreJ}
+            <Box className='carte-jeux-modal-child'>
+              {/* DISPLAY GAME INFOS */}
+              <div className='carte-jeux-modal-box'>
+                  <div className='carte-jeux-modal-titre'>
+                    {jeux.titreJ}
+                  </div>
+                  <div className='carte-jeux-modal-editeur'>
+                    {jeux.editeurJ}
+                  </div>
+                  <div className='carte-jeux-modal-anne'>
+                    {jeux.anneJ}
+                  </div>
+                  <div className='carte-jeux-modal-desc'>
+                    {jeux.descJ}
+                  </div>
               </div>
-              <div className='carte-jeux-modal-editeur'>
-                {jeux.editeurJ}
-              </div>
-              <div className='carte-jeux-modal-anne'>
-                {jeux.anneJ}
-              </div>
-              <div className='carte-jeux-modal-desc'>
-                {jeux.descJ}
-              </div>
-            </div>
-            <div className='carte-jeux-modal-actions'>
-              <div className='carte-jeux-modal-actions-prix'>
-                {jeux.prixJ + " €"}
-              </div>
-            </div>
-            
 
-              {/* Bouton Louer */}
-            <Tooltip 
-              title={!isUserConnected ? "Vous devez être connecté pour louer un jeu" : 
-                    isAlreadyRent ? "Vous avez déjà ce jeu dans votre bibliothèque" :
-                    !isAvailable ? "Déjà dans le panier" : ""}
-              disableHoverListener={isUserConnected && isAvailable}
-            >
-              <span>
-                <Button 
-                  variant="outlined" 
-                  color="success" 
-                  size="small" 
-                  onClick={handleRentClick}
-                  disabled={!isUserConnected || !isAvailable}
-                >
-                  Louer
-                </Button>
-              </span>
-
-              {isAlreadyRent ? <>
-
-                {/* Avis de la location */}
-
-                {/* Note de la location */}
-                <Box 
-                  sx={{
-                    '& > legend': { mt: 2 },
-                  }}
-                >
-                  <Typography component="legend">Votre note :</Typography>
-                  <Rating
-                    name="noteL"
-                    value={noteL}
-                    onChange={(noteL, setNoteL) => {
-                      setNoteL(noteL);
-                    }}
-                  />
-                </Box>
-
-                {/* Bouton pour arrêter la location */}
-                <Button
-                    variant="outlined"
-                    color="error"
-                    size="small"
-                    //onClick={stopRent(locations.find(l => l.idJ === jeux.idJ).idL)}
+              {/* USER HAVE RENT OR NOT */}
+              {!isAlreadyRent ? (
+                  <div className='carte-jeux-modal-actions'>
+                    <div className='carte-jeux-modal-actions-prix'>
+                      {jeux.prixJ + " € par jour"}
+                    </div>
+                  <div className='carte-jeux-modal-actions-louer'>
+                    <span>
+                      {/* Calendrier pour choisir une date */}
+                        <div className='carte-jeux-emprunt' title='Date de rendu'>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DateCalendar
+                              label="Date de rendu"
+                              disablePast={true}
+                              value={selectedDate} 
+                              onChange={(newDate) => setSelectedDate(newDate)}
+                              renderInput={(params) => <TextField {...params} />}
+                            />
+                          </LocalizationProvider>
+                      <Button 
+                        variant="outlined" 
+                        color="primary" 
+                        size="small"
+                        onClick={confirmDateAndAddToCard}
+                      >
+                        Ajouter au panier
+                      </Button>
+                    </div>
+                  </span>
+                </div>
+              </div>     
+              ) : ( 
+                <>
+                  <div className='carte-jeux-modal-actions'>
+                    {/* Note de la location */}
+                    <Box 
+                      sx={{
+                        '& > legend': { mt: 2 },
+                      }}
                     >
-                    Arrêter la location
-                    </Button>
-              </> : <></>}
-            </Tooltip>
+                      <Typography component="legend">Votre note :</Typography>
+                      <Rating
+                        required
+                        name="noteL"
+                        value={noteL}
+                        onChange={(noteL, setNoteL) => {
+                          setNoteL(noteL);
+                        }}
+                      />
+                    </Box>
+                    
+                  {/* Avis de la location */}
+                  <Box
+                    component="form"
+                    sx={{
+                      '& .MuiTextField-root': { m: 1, width: '25ch' },
+                    }}
+                  >
+                    <div>
+                      <TextField
+                        required
+                        id="commentL"
+                        label="Votre avis"
+                        multiline
+                        rows={6}
+                      />
+                    </div>
+                  </Box>
 
-            {/* Calendrier pour choisir une date */}
-            {showCalendar && (
-              <div className='carte-jeux-emprunt' title='Date de rendu'>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DateCalendar
-                    label="Date de rendu"
-                    disablePast={true}
-                    value={selectedDate} 
-                    onChange={(newDate) => setSelectedDate(newDate)}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-                <Button 
-                  variant="outlined" 
-                  color="primary" 
-                  size="small"
-                  onClick={confirmDateAndAddToCard}
-                >
-                  Confirmer la date et ajouter au panier
-                </Button>
-              </div>
-            )}
+                  {/* Bouton pour envoyé l'avis */}
+                  <Button
+                    variant="outlined"
+                    color="success"
+                    size="small"
+                    onClick={publishFeedback(locations.find(l => l.idJ === jeux.idJ).idL, noteL, commentL)}
+                    >
+                    Envoyer votre avis
+                  </Button>
 
-          </Box>
+                  {/* Bouton pour arrêter la location */}
+                  <Button
+                      variant="outlined"
+                      color="error"
+                      size="small"
+                      //onClick={stopRent(locations.find(l => l.idJ === jeux.idJ).idL)}
+                      >
+                      Arrêter la location
+                  </Button>
+                </div>
+                </>
+              )}
+            </Box>
           </div>
         </Modal>
 

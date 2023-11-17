@@ -459,7 +459,7 @@ app.put('/api/locations/update/:id', async(req, res) => {
     try{
         console.log("requete put locations/id")
         conn = await pool.getConnection();
-        const rows = await conn.query("UPDATE locations SET empruntL = ?, renduL = ?, idU = ?, idJ = ? WHERE idL = ?", [req.body.empruntL, req.body.renduL, req.body.idU, req.body.idJ, id])
+        const rows = await conn.query("UPDATE locations SET noteL = ?, commentL = ? WHERE idL = ?", [req.body.noteL, req.body.commentL, id])
         console.log(rows.affectedRows);
         res.status(200).json(rows.affectedRows);
     }
