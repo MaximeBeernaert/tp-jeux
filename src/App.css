@@ -211,7 +211,7 @@ body{
   height: 80%;
 }
 .carte-jeux-img{
-  object-fit: contain;
+  height: 90%;
   
 }
 .main-page-categorie-desc{
@@ -290,4 +290,16 @@ body{
 
 .location-titre{
   padding-top:30px;
+}
+
+.image-spec{
+    display: flex;
+    height: 80%;
+    
+}
+
+.img{
+  margin: auto;
+  height: auto;
+  width: 100%;
 }
