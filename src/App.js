@@ -13,9 +13,9 @@ import ListeJeux from './Components/Jeux/ListeJeux';
 import Panier from './Components/Panier/Panier';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import Button from '@mui/material/Button';
 import Recherche from './Components/Recherche/Recherche';
 import MesLocations from './Components/Jeux/MesLocations';
+import CarteJeuxDetails from './Components/Jeux/CarteJeuxDetails';
 
 
 function App() {
@@ -55,6 +55,7 @@ function App() {
 
           {/* LISTE DES JEUX */}
           <Route path="/gamelist" element={<ListeJeux/>} />
+          <Route path="/gamedetails/:idJ" element={<CarteJeuxDetails/>} />
 
           {/* PANIER */}
           <Route path="/card" element={<Panier/>} />

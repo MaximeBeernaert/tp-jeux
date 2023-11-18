@@ -148,8 +148,13 @@ export default function CarteJeux({ idJ }) {
     }
   }
 
+  //Redirect to game details page
+  const handleClick = (idJ) => {
+    window.location.href = `/gamedetails/${idJ}`;
+  }
+
   return (
-    <div className='carte-jeux' onClick={handleShowDetails}>
+    <div className='carte-jeux' key={jeux.idJ} onClick={() => handleClick(jeux.idJ)}>
       <div className='carte-jeux-items'>
         <div className='carte-jeux-img'>
           image de {jeux.titreJ}

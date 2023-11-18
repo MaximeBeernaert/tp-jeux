@@ -1,0 +1,61 @@
+.jeux-details-container {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff; /* Couleur de fond de la page */
+    padding: 20px;
+    margin: 0 auto; /* Centre le conteneur */
+    width: 100%; /* Largeur du conteneur */
+  }
+  
+  .card {
+    background: #fff; /* Couleur de fond des cartes */
+    border-radius: 10px; /* Coins arrondis */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Ombre portée légère */
+    margin-bottom: 20px; /* Espacement entre les cartes */
+    overflow: hidden; /* Empêche le contenu de déborder */
+  }
+  
+  .jeux-details-infos {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Ajoute un espace entre les cartes */
+  }
+  
+  .jeux-details-infos-image {
+    flex: 1; /* Prendra la moitié de l'espace disponible */
+    min-height: 300px; /* Hauteur minimale de la carte image, ajustez selon vos besoins */
+    background-size: cover;
+  }
+  
+  .jeux-details-infos-text {
+    flex: 1; /* Prendra l'autre moitié de l'espace disponible */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribue l'espace entre les éléments de texte */
+  }
+  
+  .jeux-details-feedback {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .jeux-details-feedback-form,
+  .jeux-details-feedback-comment {
+    padding: 20px;
+    min-height: 150px; /* Hauteur minimale des cartes de feedback, ajustez selon vos besoins */
+  }
+  
+  /* Utilisez des media queries pour rendre la mise en page réactive */
+  @media (max-width: 768px) {
+    .jeux-details-infos {
+      flex-direction: column;
+    }
+    
+    .jeux-details-infos-image,
+    .jeux-details-infos-text {
+      flex-basis: 100%;
+      min-height: unset; /* Réinitialise la hauteur minimale pour les mobiles */
+    }
+  }
+  

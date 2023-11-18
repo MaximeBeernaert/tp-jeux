@@ -525,5 +525,23 @@ app.delete('/api/locations/delete/:id', async(req, res) => {
     }
 });
 
+//GET ALL FEEBACKS BY GAME ID
+app.get('/feedbacks/:idJ', async (req, res) => {
+    let conn;
+    let idJ = req.params.idJ;
+    try {
+        console.log("requete get feedbacks/idJ")
+        conn = await pool.getConnection();
+        const rows = await conn.query("SELECT utilisateurs.nomU, utilisateurs.prenomU, locations.commentL, locations.noteL FROM locations JOIN utilisateurs ON locations.idU = utilisateurs.idU JOIN jeux ON locations.idJ = jeux.idJ WHERE jeux.idJ = ?;", idJ);
+        console.log(rows.affectedRows);
+        res.status(200).json(rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+
+
+
 
 app.listen(3001, () => console.log('Server running on port 3001'));  // set the port to listen
