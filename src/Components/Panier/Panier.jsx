@@ -35,11 +35,21 @@ export default function Panier() {
     setJeuxDansPanier(jeuxDansPanier.filter(jeux => jeux.idJ !== idJ));
   }
 
+  // Calculate lenght of the rent
   const calculerNombreDeJours = (debut, fin) => {
     const dateDebut = new Date(debut);
     const dateFin = new Date(fin);
     return differenceInCalendarDays(dateFin, dateDebut);
   };
+
+  // Total price
+  const calculerTotalAPayer = () => {
+    return jeuxDansPanier.reduce((total, jeu) => {
+      const joursDeLocation = calculerNombreDeJours(jeu.empruntL, jeu.renduL);
+      return total + (joursDeLocation * jeu.prixJ);
+    }, 0);
+  };
+  
 
   return (
     <div className='main-page panier'>
@@ -55,10 +65,8 @@ export default function Panier() {
               Date de Location : {format(new Date(jeux.empruntL), "d MMMM yyyy")} au {format(new Date(jeux.renduL), "d MMMM yyyy")}, soit {calculerNombreDeJours(jeux.empruntL, jeux.renduL)} jours de location
             </div>
             <div className='jeux-dans-panier-prix'>
-              Pour {calculerNombreDeJours(jeux.empruntL, jeux.renduL)} jours de location vous allez payé : {calculerNombreDeJours(jeux.empruntL, jeux.renduL) * jeux.prixJ} €
+              Pour {calculerNombreDeJours(jeux.empruntL, jeux.renduL)} jours de location vous allez payer : {calculerNombreDeJours(jeux.empruntL, jeux.renduL) * jeux.prixJ} €
             </div>
-            
-            
             <div className='jeux-dans-panier-remove'>
               <Button
                 variant="outlined" 
@@ -72,6 +80,7 @@ export default function Panier() {
           </div>
         ))}
       </div>
+      Total à payer : {calculerTotalAPayer()} €
         <div className='panier-confirmation'>
           <Button 
             variant="contained" 
