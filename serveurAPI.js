@@ -23,13 +23,13 @@ const pool = mariadb.createPool({
 app.get('/api/utilisateurs', async(req, res) => {
     let conn;
     try{
-        console.log("requete get utilisateurs")
+        // console.log("requete get utilisateurs")
         conn = await pool.getConnection();
         const rows = await conn.query("SELECT * FROM utilisateurs");
         res.status(200).json(rows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
 
     //Relase the connection
@@ -45,13 +45,13 @@ app.get('/api/utilisateurs/:id', async(req, res) => {
     let conn;
     let id = req.params.id;
     try{
-        console.log("requete get utilisateurs/id")
+        // console.log("requete get utilisateurs/id")
         conn = await pool.getConnection();
         const rows = await conn.query("SELECT * FROM utilisateurs WHERE idU = ?", id);
         res.status(200).json(rows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
 
     //Relase the connection
@@ -67,10 +67,10 @@ app.post('/api/utilisateurs/create', async(req, res) => {
     let conn;
     bcrypt.hash(req.body.mdpU, 10)
         .then( async (hash) => {
-            console.log("requete post utilisateurs")
+            // console.log("requete post utilisateurs")
             conn = await pool.getConnection();
             const rows = await conn.query("INSERT INTO utilisateurs (nomU, prenomU, mailU, mdpU) VALUES (?, ?, ?, ?)", [req.body.nomU, req.body.prenomU, req.body.mailU, hash])
-            console.log(rows.affectedRows);
+            // console.log(rows.affectedRows);
             res.status(200).json(rows.affectedRows);
         }
     ).catch(error => res.status(500).json({error}));
@@ -83,7 +83,7 @@ app.get('/api/utilisateurs/connexion/:mail/:mdp', async(req, res) => {
     let mail = req.params.mail;
     let mdp = req.params.mdp;
     try{
-        console.log("requete get utilisateurs/mail/mdp")
+        // console.log("requete get utilisateurs/mail/mdp")
         conn = await pool.getConnection();
         const rows = await conn.query("SELECT * FROM utilisateurs WHERE mailU = ?", mail);
         if(rows.length > 0){
@@ -102,7 +102,7 @@ app.get('/api/utilisateurs/connexion/:mail/:mdp', async(req, res) => {
         }
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     } 
 
     //Relase the connection
@@ -118,14 +118,14 @@ app.put('/api/utilisateurs/update/:id', async(req, res) => {
     let conn;
     let id = req.params.id;
     try{
-        console.log("requete put utilisateurs/id")
+        // console.log("requete put utilisateurs/id")
         conn = await pool.getConnection();
         const rows = await conn.query("UPDATE utilisateurs SET nomU = ?, prenomU = ?, mailU = ?, mdpU = ? WHERE idU = ?", [req.body.nomU, req.body.prenomU, req.body.mailU, req.body.mdpU, id])
-        console.log(rows.affectedRows);
+        // console.log(rows.affectedRows);
         res.status(200).json(rows.affectedRows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
 
     //Relase the connection
@@ -141,14 +141,14 @@ app.delete('/api/utilisateurs/delete/:id', async(req, res) => {
     let conn;
     let id = req.params.id;
     try{
-        console.log("requete delete utilisateurs/id")
+        // console.log("requete delete utilisateurs/id")
         conn = await pool.getConnection();
         const rows = await conn.query("DELETE FROM utilisateurs WHERE idU = ?", id)
-        console.log(rows.affectedRows);
+        // console.log(rows.affectedRows);
         res.status(200).json(rows.affectedRows);
     }
     catch(err){
-        console.log()
+        // console.log()
     } 
 
     //Relase the connection
@@ -165,13 +165,13 @@ app.delete('/api/utilisateurs/delete/:id', async(req, res) => {
 app.get('/api/jeux', async(req, res) => {
     let conn;
     try{
-        console.log("requete get jeux")
+        // console.log("requete get jeux")
         conn = await pool.getConnection();
         const rows = await conn.query("SELECT * FROM jeux");
         res.status(200).json(rows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
 
     //Relase the connection
@@ -187,13 +187,13 @@ app.get('/api/jeux/:id', async(req, res) => {
     let conn;
     let id = req.params.id;
     try{
-        console.log("requete get jeux/id")
+        // console.log("requete get jeux/id")
         conn = await pool.getConnection();
         const rows = await conn.query("SELECT * FROM jeux WHERE idJ = ?", id);
         res.status(200).json(rows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
 
     //Relase the connection
@@ -205,16 +205,16 @@ app.get('/api/jeux/:id', async(req, res) => {
 });
 
 // GET JEUX BY BEST RATING
-app.get('/api/jeux/best', async(req, res) => {
+app.get('/api/bestgames', async(req, res) => {
     let conn;
     try{
-        console.log("requete get jeux/best")
+        // console.log("requete get jeux/best")
         conn = await pool.getConnection();
-        const rows = await conn.query("SELECT * FROM jeux ORDER BY noteJ DESC LIMIT 9");
+        const rows = await conn.query('SELECT j.idJ FROM jeux j JOIN locations l ON j.idJ = l.idJ WHERE l.noteL IS NOT NULL GROUP BY j.idJ ORDER BY AVG(l.noteL) DESC LIMIT 9;');
         res.status(200).json(rows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
     //Relase the connection
     finally {
@@ -229,13 +229,13 @@ app.get('/api/jeux/best', async(req, res) => {
 app.get('/api/recent', async(req, res) => {
     let conn;
     try{
-        console.log("requete get jeux/recent")
+        // console.log("requete get jeux/recent")
         conn = await pool.getConnection();
         const rows = await conn.query("SELECT * FROM jeux ORDER BY anneeJ DESC LIMIT 9");
         res.status(200).json(rows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
     //Relase the connection
     finally {
@@ -251,13 +251,13 @@ app.get('/api/jeux/search/:search', async(req, res) => {
     let conn;
     let search = req.params.search;
     try{
-        console.log("requete get jeux/search")
+        // console.log("requete get jeux/search")
         conn = await pool.getConnection();
         const rows = await conn.query("SELECT * FROM jeux WHERE titreJ LIKE ? OR descJ LIKE ? OR anneeJ LIKE ? OR editeurJ LIKE ? ORDER BY anneeJ DESC LIMIT 9", ["%"+search+"%", "%"+search+"%", "%"+search+"%", "%"+search+"%"]);
         res.status(200).json(rows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
     //Relase the connection
     finally {
@@ -273,14 +273,14 @@ app.get('/api/jeux/search/:search', async(req, res) => {
 app.post('/api/jeux/create', async(req, res) => {
     let conn;
     try{
-        console.log("requete post jeux")
+        // console.log("requete post jeux")
         conn = await pool.getConnection();
         const rows = await conn.query("INSERT INTO jeux (nomJ, descriptionJ, prixJ, imageJ) VALUES (?, ?, ?, ?)", [req.body.nomJ, req.body.descriptionJ, req.body.prixJ, req.body.imageJ])
-        console.log(rows.affectedRows);
+        // console.log(rows.affectedRows);
         res.status(200).json(rows.affectedRows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
 
     //Relase the connection
@@ -296,14 +296,14 @@ app.put('/api/jeux/update/:id', async(req, res) => {
     let conn;
     let id = req.params.id;
     try{
-        console.log("requete put jeux/id")
+        // console.log("requete put jeux/id")
         conn = await pool.getConnection();
         const rows = await conn.query("UPDATE jeux SET nomJ = ?, descriptionJ = ?, prixJ = ?, imageJ = ? WHERE idJ = ?", [req.body.nomJ, req.body.descriptionJ, req.body.prixJ, req.body.imageJ, id])
-        console.log(rows.affectedRows);
+        // console.log(rows.affectedRows);
         res.status(200).json(rows.affectedRows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
 
     //Relase the connection
@@ -319,14 +319,14 @@ app.delete('/api/jeux/delete/:id', async(req, res) => {
     let conn;
     let id = req.params.id;
     try{
-        console.log("requete delete jeux/id")
+        // console.log("requete delete jeux/id")
         conn = await pool.getConnection();
         const rows = await conn.query("DELETE FROM jeux WHERE idJ = ?", id)
-        console.log(rows.affectedRows);
+        // console.log(rows.affectedRows);
         res.status(200).json(rows.affectedRows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
 
     //Relase the connection
@@ -343,13 +343,13 @@ app.delete('/api/jeux/delete/:id', async(req, res) => {
 app.get('/api/locations', async(req, res) => {
     let conn;
     try{
-        console.log("requete get locations")
+        // console.log("requete get locations")
         conn = await pool.getConnection();
         const rows = await conn.query("SELECT * FROM locations");
         res.status(200).json(rows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
 
     //Relase the connection
@@ -365,13 +365,13 @@ app.get('/api/locations/:id', async(req, res) => {
     let conn;
     let id = req.params.id;
     try{
-        console.log("requete get locations/id")
+        // console.log("requete get locations/id")
         conn = await pool.getConnection();
         const rows = await conn.query("SELECT * FROM locations WHERE idL = ?", id);
         res.status(200).json(rows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
 
      //Relase the connection
@@ -404,11 +404,38 @@ app.get('/api/locations/user/:idU', async (req, res) => {
     }
   });
   
+// GET AVERAGE RATING OF A GAME
+app.get('/api/locations/avg/:idJ', async(req, res) => {
+    let conn;
+    let idJ = req.params.idJ;
+    try{
+        // console.log("requete get locations/avg/idJ")
+        conn = await pool.getConnection();
+        const query = `
+        SELECT AVG(noteL) AS avg
+        FROM locations
+        WHERE idJ = ?
+        `;
+    }
+    catch(err){
+        // console.log("Erreur" + err);
+    }
+    //Relase the connection
+    finally {
+        if (conn) {
+            conn.release();
+        }
+    }
+});
+
+// GET BEST RATED GAMES
+
+
 // GET 9 GAMES MOST RENTED
 app.get('/api/mostrented', async(req, res) => {
     let conn;
     try{
-        console.log("requete get locations/mostrented")
+        // console.log("requete get locations/mostrented")
         conn = await pool.getConnection();
         const rows = await conn.query("SELECT j.idJ FROM jeux j JOIN locations l ON j.idJ = l.idJ GROUP BY j.idJ ORDER BY COUNT(*) DESC LIMIT 9");
         let array = [];
@@ -418,7 +445,7 @@ app.get('/api/mostrented', async(req, res) => {
         res.status(200).json(array);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
     //Relase the connection
     finally {
@@ -434,14 +461,14 @@ app.get('/api/mostrented', async(req, res) => {
 app.post('/api/locations/create', async(req, res) => {
     let conn;
     try{
-        console.log("requete post locations")
+        // console.log("requete post locations")
         conn = await pool.getConnection();
         const rows = await conn.query("INSERT INTO locations (empruntL, renduL, idU, idJ) VALUES (?, ?, ?, ?)", [req.body.empruntL, req.body.renduL, req.body.idU, req.body.idJ])
-        console.log(rows.affectedRows);
+        // console.log(rows.affectedRows);
         res.status(200).json(rows.affectedRows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
 
     //Relase the connection
@@ -457,14 +484,14 @@ app.put('/api/locations/update/:id', async(req, res) => {
     let conn;
     let id = req.params.id;
     try{
-        console.log("requete put locations/id")
+        // console.log("requete put locations/id")
         conn = await pool.getConnection();
         const rows = await conn.query("UPDATE locations SET noteL = ?, commentL = ? WHERE idL = ?", [req.body.noteL, req.body.commentL, id])
-        console.log(rows.affectedRows);
+        // console.log(rows.affectedRows);
         res.status(200).json(rows.affectedRows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
 
     //Relase the connection
@@ -480,14 +507,14 @@ app.delete('/api/locations/delete/:id', async(req, res) => {
     let conn;
     let id = req.params.id;
     try{
-        console.log("requete delete locations/id")
+        // console.log("requete delete locations/id")
         conn = await pool.getConnection();
         const rows = await conn.query("DELETE FROM locations WHERE idL = ?", id)
-        console.log(rows.affectedRows);
+        // console.log(rows.affectedRows);
         res.status(200).json(rows.affectedRows);
     }
     catch(err){
-        console.log("Erreur" + err);
+        // console.log("Erreur" + err);
     }
 
     //Relase the connection

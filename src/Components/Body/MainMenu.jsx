@@ -11,30 +11,22 @@ export default function MainMenu() {
   const [jeuxVentes, setJeuxVentes] = useState([]);
 
   useEffect(() => {
-      const fetchRecentGames = () => {
-          axios.get(url+"recent")
-            .then(res => {
-              setJeuxRecents(res.data);
-            })
-            .catch(err => console.error(err));
-        };
-      const fetchMostRentedGames = () => {
-        axios.get(url+"mostrented")
-          .then(res => {
-            setJeuxVentes(res.data);
-          })
-          .catch(err => console.error(err));
-      }
-      const fetchBestRatedGames = () => {
-        axios.get(url+"jeux/best")
-          .then(res => {
-            setJeuxNotes(res.data);
-          })
-          .catch(err => console.error(err));
-      }
-      fetchRecentGames();
-      fetchMostRentedGames();
-      fetchBestRatedGames();
+    axios.get(url+"recent")
+      .then(res => {
+        setJeuxRecents(res.data);
+      })
+      .catch(err => console.error(err));
+    axios.get(url+"mostrented")
+      .then(res1 => {
+        
+        setJeuxVentes(res1.data);
+      })
+      .catch(err => console.error(err));
+    axios.get(url+"bestgames")
+      .then(res2 => {
+        setJeuxNotes(res2.data);
+      })
+      .catch(err => console.error(err));
   }, [jeuxRecents, jeuxVentes, jeuxNotes]);
 
     return (
@@ -51,7 +43,7 @@ export default function MainMenu() {
             {jeuxRecents != [] 
             ?
               jeuxRecents.map( (jeu,i) =>
-              <CarteJeux idJ={i+1}/>
+              <CarteJeux idJ={jeu.idJ}/>
               )
             :
               <div className='main-page-categorie-list-text'>
@@ -72,7 +64,7 @@ export default function MainMenu() {
             {jeuxNotes.length !== 0
             ?
               jeuxNotes.map( (jeu,i) =>
-                <CarteJeux idJ={i+1}/>
+                <CarteJeux idJ={jeu.idJ}/>
               )
             :
               <div className='main-page-categorie-list-text'>
@@ -92,8 +84,10 @@ export default function MainMenu() {
           <div className='main-page-categorie-list main-page-ventes-list'>
             {jeuxVentes.length !== 0 
             ?
+            
               jeuxVentes.map( (jeu,i) =>
-                <CarteJeux idJ={i+1}/>
+
+                <CarteJeux idJ={jeu}/>
               )
             :
               <div className='main-page-categorie-list-text'>

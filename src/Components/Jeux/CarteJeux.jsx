@@ -17,7 +17,6 @@ export default function CarteJeux({ idJ }) {
 
   //User connection
   const [isUserConnected, setIsUserConnected] = useState(false);
-
   //Rent date
   const empruntL = useState(new Date()); //Today
   const [renduL, setRenduL] = useState(null); //Selected date by user
@@ -110,7 +109,6 @@ export default function CarteJeux({ idJ }) {
   const stopRent = async (idL) => {
     try {
       const response = await axios.delete(`http://localhost:3001/api/locations/delete/${idL}`);
-      console.log(response);
     }
     catch (error) {
       console.error(error);
@@ -143,8 +141,7 @@ export default function CarteJeux({ idJ }) {
   //Publish user feedback
   const publishFeedback = async (idL, noteL, commentL) => {
     try {
-      const reponse = await axios.post(`http://localhost:3001/api/locations/update/${idL}`)
-      console.log(reponse);
+      const reponse = await axios.put(`http://localhost:3001/api/locations/update/${idL}`)
     }
     catch (error) {
       console.error(error);
@@ -155,7 +152,7 @@ export default function CarteJeux({ idJ }) {
     <div className='carte-jeux' onClick={handleShowDetails}>
       <div className='carte-jeux-items'>
         <div className='carte-jeux-img'>
-          <img className='img-jeu-carte' src={jeux.imgJ} alt={jeux.titreJ} />
+          image de {jeux.titreJ}
         </div>        
         <Box className='carte-jeux-text' sx ={{bgcolor:'secondary.main'}}>
           {/* Détails du jeu */}
@@ -239,8 +236,8 @@ export default function CarteJeux({ idJ }) {
                         required
                         name="noteL"
                         value={noteL}
-                        onChange={(noteL, setNoteL) => {
-                          setNoteL(noteL);
+                        onChange={(event, newValue) => {
+                          setNoteL(newValue);
                         }}
                       />
                     </Box>
@@ -275,12 +272,12 @@ export default function CarteJeux({ idJ }) {
 
                   {/* Bouton pour arrêter la location */}
                   <Button
-                      variant="outlined"
-                      color="error"
-                      size="small"
-                      //onClick={stopRent(locations.find(l => l.idJ === jeux.idJ).idL)}
-                      >
-                      Arrêter la location
+                    variant="outlined"
+                    color="error"
+                    size="small"
+                    onClick={() => stopRent(locations.find(l => l.idJ === jeux.idJ).idL)}
+                  >
+                    Arrêter la location
                   </Button>
                 </div>
                 </>

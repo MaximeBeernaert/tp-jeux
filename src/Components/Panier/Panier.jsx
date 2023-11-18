@@ -37,8 +37,10 @@ export default function Panier() {
 
   return (
     <div className='main-page panier'>
+     
       {jeuxDansPanier.length > 0 ? (
         <>
+         <div className='main-page-game-list'>
         {jeuxDansPanier.map((jeux, index) => (
           <div key={index} className='jeux-dans-panier'>
             <div>{jeux.titreJ}</div>
@@ -60,7 +62,7 @@ export default function Panier() {
             </div>
           </div>
         ))}
-      
+      </div>
         <div className='panier-confirmation'>
           <Button 
             variant="contained" 

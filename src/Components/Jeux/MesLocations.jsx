@@ -23,15 +23,17 @@ export default function MesLocations() {
 
   return (
     <div className='main-page'>
-      Mes Locations
+      <div className='location-titre'>
+        Mes Locations
+      </div>
         <MaRecherche/>
-        <div className='liste-jeux'>
+        <div className='main-page-game-list'>
           {locations.map( (jeu,i) =>
               <div className='cartes-jeux'>
                   <CarteJeux idJ={jeu.idJ}/>
               </div>
           )}
-        </div>
+      </div>
     </div>
   )
 }
