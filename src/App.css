@@ -208,11 +208,10 @@ body{
 .img-jeu-carte{
   object-fit: cover;
   max-width: 100%;
-  height: 80%;
 }
-.carte-jeux-img{
-  height: 90%;
-  
+.img{
+  max-height: 100%;
+
 }
 .main-page-categorie-desc{
   display: flex;

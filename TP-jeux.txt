@@ -24,16 +24,14 @@ CREATE TABLE `locations` (
 )
 
 
-CREATE TABLE `locations` (
-  `idL` int(11) NOT NULL AUTO_INCREMENT,
-  `idU` int(11) NOT NULL,
-  `idJ` int(11) NOT NULL,
-  `empruntL` date NOT NULL,
-  `renduL` date NOT NULL,
-  `commentL` varchar(100) DEFAULT NULL,
-  `noteL` int(11) DEFAULT NULL,
-  PRIMARY KEY (`idL`)
-);
+CREATE TABLE `utilisateurs` (
+  `idU` int(11) NOT NULL AUTO_INCREMENT,
+  `nomU` varchar(100) NOT NULL,
+  `prenomU` varchar(100) NOT NULL,
+  `mailU` varchar(100) NOT NULL,
+  `mdpU` varchar(100) NOT NULL,
+  PRIMARY KEY (`idU`)
+)
 
 
 INSERT INTO tp_jeux.utilisateurs (nomU,prenomU,mailU,mdpU) VALUES
