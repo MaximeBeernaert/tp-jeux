@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     background: #ffffff; /* Couleur de fond de la page */
-    padding: 20px;
+    /* padding: 20px; */
     margin: 0 auto; /* Centre le conteneur */
     width: 100%; /* Largeur du conteneur */
   }
@@ -18,18 +18,21 @@
   .jeux-details-infos {
     display: flex;
     justify-content: space-between;
+    padding: 20px;
     gap: 20px; /* Ajoute un espace entre les cartes */
   }
   
   .jeux-details-infos-image {
     flex: 1; /* Prendra la moitié de l'espace disponible */
     min-height: 300px; /* Hauteur minimale de la carte image, ajustez selon vos besoins */
+    margin-left: 80px;
     background-size: cover;
   }
   
   .jeux-details-infos-text {
     flex: 1; /* Prendra l'autre moitié de l'espace disponible */
     padding: 20px;
+    margin-right: 80px;
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* Distribue l'espace entre les éléments de texte */
@@ -38,6 +41,7 @@
   .jeux-details-feedback {
     display: flex;
     flex-direction: column;
+    margin: 0 80px 20px 80px;
   }
   
   .jeux-details-feedback-form,
@@ -59,3 +63,14 @@
     }
   }
   
+  .feedback-item-list{
+    display: flex;
+    flex-wrap: wrap ;
+    justify-content: space-around;
+    padding: 0 100px 0 100px;
+  }
+
+  .feedback-item{
+    padding: 10px 50px;
+    width: 200px;
+  }

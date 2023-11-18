@@ -157,7 +157,7 @@ export default function CarteJeux({ idJ }) {
     <div className='carte-jeux' key={jeux.idJ} onClick={() => handleClick(jeux.idJ)}>
       <div className='carte-jeux-items'>
         <div className='carte-jeux-img' >
-            <div className='image-spec'>
+            <div className='image-spec' >
               <img className='img' src={jeux.imgJ} alt={jeux.titreJ} />
             </div>
         </div>        

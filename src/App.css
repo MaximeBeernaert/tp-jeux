@@ -107,7 +107,7 @@ body{
 }
 .carte-jeux-img{
   width:100%;
-  height: 100%;
+  height: 90%;
 }
 
 .header-mainmenu{
@@ -293,7 +293,7 @@ body{
 
 .image-spec{
     display: flex;
-    height: 80%;
+    height: 100%;
     
 }
 

@@ -74,7 +74,6 @@ export default function CarteJeuxDetails() {
         try {
             const response = await axios.get(`${baseUrl}/locations/user/${idU}`);
             setLocations(response.data);
-            console.log(response.data);
             //Check if repsonse.data contains the current game
             const rent = response.data.some(l => l.idJ === jeux.idJ);
             setIsAlreadyRent(rent);
@@ -148,6 +147,7 @@ export default function CarteJeuxDetails() {
         axios.get(`${baseUrl}/feedbacks/${idJ}`)
             .then(res => {
                 setFeedbacks(res.data);
+                console.log(res)
             })
             .catch(err => {
                 console.error(err);
@@ -309,6 +309,7 @@ export default function CarteJeuxDetails() {
 
             <div className='jeux-details-feedback-comment'>
                 <Typography variant="h6">Avis des utilisateurs :</Typography>
+                <div className='feedback-item-list'>
                 {feedbacks.length > 0 ? (
                 feedbacks.map((feedback, index) => (
                     <div key={index} className='feedback-item'>
@@ -317,9 +318,11 @@ export default function CarteJeuxDetails() {
                     <Rating name="read-only" value={feedback.noteL} readOnly />
                     </div>
                 ))
+                
                 ) : (
                 <Typography>Aucun avis pour le moment.</Typography>
                 )}
+                </div>
             </div>
         </div>
 
