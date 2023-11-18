@@ -9,7 +9,6 @@ import { format } from 'date-fns';
 import { useParams } from 'react-router-dom';
 
 import './CarteJeuxDetails.css';
-import { is } from 'date-fns/locale';
 
 export default function CarteJeuxDetails() {
 
@@ -73,7 +72,7 @@ export default function CarteJeuxDetails() {
     const getLocationsForCurrentUser = async () => {
         const idU = localStorage.getItem('user');
         try {
-            const response = await axios.get(`http://localhost:3001/api/locations/user/${idU}`);
+            const response = await axios.get(`${baseUrl}/locations/user/${idU}`);
             setLocations(response.data);
             console.log(response.data);
             //Check if repsonse.data contains the current game
@@ -104,6 +103,7 @@ export default function CarteJeuxDetails() {
 
         const itemToAdd = {
             idJ: jeux.idJ,
+            price: jeux.prixJ,
             renduL: formattedRenduL,
             empruntL: formattedEmpruntL
         };

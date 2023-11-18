@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
 import axios from 'axios';
-import { format } from 'date-fns';
+import { format, differenceInCalendarDays } from 'date-fns';
 // ... autres imports nécessaires
 
 export default function Panier() {
@@ -35,6 +35,12 @@ export default function Panier() {
     setJeuxDansPanier(jeuxDansPanier.filter(jeux => jeux.idJ !== idJ));
   }
 
+  const calculerNombreDeJours = (debut, fin) => {
+    const dateDebut = new Date(debut);
+    const dateFin = new Date(fin);
+    return differenceInCalendarDays(dateFin, dateDebut);
+  };
+
   return (
     <div className='main-page panier'>
      
@@ -45,10 +51,13 @@ export default function Panier() {
           <div key={index} className='jeux-dans-panier'>
             <div>{jeux.titreJ}</div>
             <div>{jeux.prixJ + " €"}</div>
-            <div className='jeux-dans-panier-date'>
-                            
-                Date de Location : {format(new Date(jeux.empruntL), "d MMMM yyyy")} au {format(new Date(jeux.renduL), "d MMMM yyyy")}
-              </div>
+            <div className='jeux-dans-panier-date'>              
+              Date de Location : {format(new Date(jeux.empruntL), "d MMMM yyyy")} au {format(new Date(jeux.renduL), "d MMMM yyyy")}, soit {calculerNombreDeJours(jeux.empruntL, jeux.renduL)} jours de location
+            </div>
+            <div className='jeux-dans-panier-prix'>
+              Pour {calculerNombreDeJours(jeux.empruntL, jeux.renduL)} jours de location vous allez payé : {calculerNombreDeJours(jeux.empruntL, jeux.renduL) * jeux.prixJ} €
+            </div>
+            
             
             <div className='jeux-dans-panier-remove'>
               <Button
