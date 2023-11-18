@@ -8,17 +8,20 @@ CREATE TABLE `jeux` (
   `anneeJ` date NOT NULL,
   `descJ` varchar(100) DEFAULT NULL,
   `prixJ` float NOT NULL,
+  `imgJ` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`idJ`)
-);
+)
 
-CREATE TABLE `utilisateurs` (
-  `idU` int(11) NOT NULL AUTO_INCREMENT,
-  `nomU` varchar(100) NOT NULL,
-  `prenomU` varchar(100) NOT NULL,
-  `mailU` varchar(100) NOT NULL,
-  `mdpU` varchar(100) NOT NULL,
-  PRIMARY KEY (`idU`)
-);
+CREATE TABLE `locations` (
+  `idL` int(11) NOT NULL AUTO_INCREMENT,
+  `idU` int(11) NOT NULL,
+  `idJ` int(11) NOT NULL,
+  `empruntL` date NOT NULL,
+  `renduL` date NOT NULL,
+  `commentL` varchar(100) DEFAULT NULL,
+  `noteL` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idL`)
+)
 
 
 CREATE TABLE `locations` (
@@ -31,3 +34,121 @@ CREATE TABLE `locations` (
   `noteL` int(11) DEFAULT NULL,
   PRIMARY KEY (`idL`)
 );
+
+
+INSERT INTO tp_jeux.utilisateurs (nomU,prenomU,mailU,mdpU) VALUES
+	 ('BEERNAERT','Maxime','maximebeernaert@gmail.com','$2b$10$m.pVQVbGHr8HSdpcpEK2MeqBa5rgkAYLddcsiU3Xhl3gh0XvLH1N.'),
+	 ('Doe','John','john.doe@email.com','motdepasse1'),
+	 ('Smith','Jane','jane.smith@email.com','motdepasse2'),
+	 ('Johnson','Robert','robert.johnson@email.com','motdepasse3'),
+	 ('Williams','Emily','emily.williams@email.com','motdepasse4'),
+	 ('Brown','Michael','michael.brown@email.com','motdepasse5'),
+	 ('Davis','Emma','emma.davis@email.com','motdepasse6'),
+	 ('Miller','Daniel','daniel.miller@email.com','motdepasse7'),
+	 ('Jones','Olivia','olivia.jones@email.com','motdepasse8'),
+	 ('Garcia','Ethan','ethan.garcia@email.com','motdepasse9'),
+	 ('Martinez','Ava','ava.martinez@email.com','motdepasse10');
+
+
+INSERT INTO tp_jeux.locations (idU,idJ,empruntL,renduL,commentL,noteL) VALUES
+	 (4,1,'2023-11-17','2024-03-30',NULL,NULL),
+	 (1,1,'2023-01-10','2023-01-15','Excellent jeu, jai adore!',5),
+	 (2,3,'2023-02-05','2023-02-12','Tres addictif, je recommande',4),
+	 (3,5,'2023-03-20','2023-03-25','Belle experience de jeu',4),
+	 (4,8,'2023-04-15','2023-04-22',NULL,NULL),
+	 (5,10,'2023-05-01','2023-05-08','Graphismes incroyables',4),
+	 (6,12,'2023-06-10','2023-06-17','Un jeu de role captivant',5),
+	 (7,14,'2023-07-05','2023-07-12','Pas mal, mais peut etre ameliore',3),
+	 (8,16,'2023-08-20','2023-08-27','Beaucoup de fun en multijoueur',4),
+	 (9,18,'2023-09-15','2023-09-22','Scenario intrigant',5);
+INSERT INTO tp_jeux.locations (idU,idJ,empruntL,renduL,commentL,noteL) VALUES
+	 (10,20,'2023-10-01','2023-10-08','Un jeu de sport different',3),
+	 (1,2,'2023-02-10','2023-02-15','Jeu très divertissant',4),
+	 (2,4,'2023-03-05','2023-03-12','Super expérience de jeu en ligne',5),
+	 (3,6,'2023-04-20','2023-04-25','Histoire captivante',4),
+	 (4,9,'2023-05-15','2023-05-22',NULL,NULL),
+	 (5,11,'2023-06-01','2023-06-08','Beaucoup de contenu à explorer',4),
+	 (6,13,'2023-07-10','2023-07-17','Graphismes époustouflants',5),
+	 (7,15,'2023-08-05','2023-08-12','Mode multijoueur bien équilibré',3),
+	 (8,17,'2023-09-20','2023-09-27','Intrigues et rebondissements',4),
+	 (9,19,'2023-10-15','2023-10-22','Personnages mémorables',5);
+INSERT INTO tp_jeux.locations (idU,idJ,empruntL,renduL,commentL,noteL) VALUES
+	 (10,1,'2023-11-01','2023-11-08','Un jeu de sport différent',3),
+	 (1,3,'2023-02-10','2023-02-15','Le meilleur jeu de lannee',5),
+	 (2,5,'2023-03-05','2023-03-12','Jai passe des heures a jouer',4),
+	 (3,7,'2023-04-20','2023-04-25','Scenario bien ecrit',4),
+	 (5,12,'2023-06-01','2023-06-08','Des graphismes a couper le souffle',4),
+	 (6,14,'2023-07-10','2023-07-17','Je recommande fortement',5),
+	 (7,16,'2023-08-05','2023-08-12','Un gameplay strategique',3),
+	 (8,18,'2023-09-20','2023-09-27','Une experience immersive',4),
+	 (9,20,'2023-10-15','2023-10-22','Un jeu innovant',5),
+	 (10,2,'2023-11-01','2023-11-08','Des heures de plaisir',3);
+INSERT INTO tp_jeux.locations (idU,idJ,empruntL,renduL,commentL,noteL) VALUES
+	 (1,4,'2023-01-10','2023-01-15','Jeu prenant, jai adore!',4),
+	 (2,6,'2023-02-05','2023-02-12','Une experience de jeu unique',5),
+	 (3,8,'2023-03-20','2023-03-25','Super jeu, je le recommande',4),
+	 (5,12,'2023-05-01','2023-05-08','Un jeu a ne pas manquer',4),
+	 (6,14,'2023-06-10','2023-06-17','Graphismes exceptionnels',5),
+	 (7,16,'2023-07-05','2023-07-12','Jeu divertissant',3),
+	 (8,18,'2023-08-20','2023-08-27','Tres fun en multijoueur',4),
+	 (9,20,'2023-09-15','2023-09-22','Scenario intrigant',5),
+	 (10,2,'2023-10-01','2023-10-08','Experience de jeu immersive',3),
+	 (1,4,'2023-11-10','2023-11-15','Un incontournable',5);
+INSERT INTO tp_jeux.locations (idU,idJ,empruntL,renduL,commentL,noteL) VALUES
+	 (2,6,'2023-12-05','2023-12-12','Un classique moderne',4),
+	 (3,8,'2024-01-20','2024-01-25','Bande son incroyable',4),
+	 (5,12,'2024-03-01','2024-03-08','Un must pour les gamers',4),
+	 (6,14,'2024-04-10','2024-04-17','Aventure passionnante',5),
+	 (7,16,'2024-05-05','2024-05-12','Mode multijoueur bien equilibre',3),
+	 (8,18,'2024-06-20','2024-06-27','Univers du jeu bien developpe',4),
+	 (9,20,'2024-07-15','2024-07-22','Jeu innovant',5),
+	 (10,2,'2024-08-01','2024-08-08','Des heures de plaisir',3),
+	 (1,4,'2024-09-10','2024-09-15','Rejouabilite elevee',4),
+	 (2,6,'2024-10-05','2024-10-12','Jeu strategique',5);
+INSERT INTO tp_jeux.locations (idU,idJ,empruntL,renduL,commentL,noteL) VALUES
+	 (3,8,'2024-11-20','2024-11-25','Personnages memorables',4),
+	 (5,12,'2025-01-01','2025-01-08','Un jeu a decouvrir',4),
+	 (6,14,'2025-02-10','2025-02-17','Mode solo captivant',5),
+	 (7,16,'2025-03-05','2025-03-12','Un jeu amusant en famille',3),
+	 (8,18,'2025-04-20','2025-04-27','Belle direction artistique',4),
+	 (10,2,'2025-06-01','2025-06-08','Jeu competitif',3),
+	 (1,4,'2025-07-10','2025-07-15','Un jeu qui repousse les limites',5),
+	 (2,6,'2025-08-05','2025-08-12','Jeu de science-fiction impressionnant',4),
+	 (3,8,'2025-09-20','2025-09-27','Un univers vaste a explorer',4),
+	 (5,12,'2025-11-01','2025-11-08','Un jeu pour tous les ages',4);
+INSERT INTO tp_jeux.locations (idU,idJ,empruntL,renduL,commentL,noteL) VALUES
+	 (6,14,'2025-12-10','2025-12-17','Un jeu qui vous transporte',5),
+	 (7,16,'2026-01-05','2026-01-12','Jeu dhorreur palpitant',3),
+	 (8,18,'2026-02-20','2026-02-27','Un jeu de strategie passionnant',4),
+	 (9,20,'2026-03-15','2026-03-22','Des combats epiques',5),
+	 (10,2,'2026-04-01','2026-04-08','Un jeu pour les amateurs de puzzle',3),
+	 (1,4,'2026-05-10','2026-05-15','Jeu educatif stimulant',4),
+	 (2,6,'2026-06-05','2026-06-12','Un jeu relaxant',5),
+	 (4,7,'2023-11-18','2023-11-30',NULL,NULL),
+	 (4,10,'2023-11-18','2023-11-26',NULL,NULL);
+
+INSERT INTO tp_jeux.jeux (titreJ,editeurJ,anneeJ,descJ,prixJ,imgJ) VALUES
+	 ('Foxhole','SIEGE CAMP','2016-08-04','MMORPG en coopération',1.5,'https://thumbnails.pcgamingwiki.com/1/1f/Foxhole_cover.jpg/300px-Foxhole_cover.jpg'),
+	 ('Grand Theft Auto V','Rockstar Games','2013-09-17','Action-aventure en monde ouvert',1.9,'https://i.pinimg.com/originals/c5/09/c3/c509c3c81351027a2568221bfd74d8d7.jpg'),
+	 ('Hearts of Iron IV','Paradox Games','2016-06-06','Stratégie',1.9,'https://gpstatic.com/acache/30/30/1/fr/t620x300-62e94797bbdfb58353eeb7b8348096a8.jpg'),
+	 ('Minecraft','Mojang','2011-11-18','Sandbox créatif',1.6,'https://i.stack.imgur.com/dqVlX.png'),
+	 ('Fortnite','Epic Games','2017-07-25','Battle Royale',0.5,'https://gaming-cdn.com/images/products/2500/orig/fortnite-pc-jeu-epic-games-cover.jpg?v=1695111218'),
+	 ('Overwatch','Blizzard Entertainment','2016-05-24','Jeu de tir en équipe',3.3,'https://gaming-cdn.com/images/products/2208/orig/overwatch-pc-jeu-battle-net-cover.jpg?v=1668415006'),
+	 ('FIFA 22','Electronic Arts','2021-10-01','Simulation de football',4.5,'https://gaming-cdn.com/images/products/2208/orig/overwatch-pc-jeu-battle-net-cover.jpg?v=1668415006'),
+	 ('Call of Duty: Warzone','Activision','2020-03-10','Battle Royale',0.5,'https://s3-eu-central-1.amazonaws.com/www-staging.esports.com/WP%20Media%20Folder%20-%20esports-com//var/app/current/web/app/uploads/2021/06/Call-of-Duty-Season-4-Warzone-Cover-Image-720x405.jpg'),
+	 ('The Elder Scrolls V: Skyrim','Bethesda Softworks','2011-11-11','Action RPG',3.1,'https://assets.altarofgaming.com/wp-content/uploads/2022/06/the-elder-scrolls-v-skyrim-game-cover-altar-of-gaming.jpg'),
+	 ('Apex Legends','Electronic Arts','2019-02-04','Battle Royale',0.5,'https://mms.businesswire.com/media/20190204005535/en/703803/4/APEX_Primary_Art_72dpi_RGB_FIN.jpg');
+INSERT INTO tp_jeux.jeux (titreJ,editeurJ,anneeJ,descJ,prixJ,imgJ) VALUES
+	 ('World of Warcraft','Blizzard Entertainment','2004-11-23','MMORPG',2.0,'https://sm.ign.com/ign_fr/cover/w/world-of-w/world-of-warcraft-classic_u88j.jpg'),
+	 ('Counter-Strike: Global Offensive','Valve','2012-08-21','Jeu de tir à la première personne',1.1,'https://www.gbhbl.com/wp-content/uploads/2022/02/CSGO.jpg'),
+	 ('Mortal Kombat 11','Warner Bros. Interactive Entertainment','2019-04-23','Jeu de combat',2.8,'https://static.actugaming.net/media/2018/12/mortal-kombat-11-cover-1.jpg'),
+	 ('Rocket League','Psyonix','2015-07-07','Jeu de sport automobile',1.1,'https://www.operationsports.com/wp-content/uploads/2021/07/Rocket-League%C2%AE_20210716092816-scaled.jpg?resize=1000%2C600'),
+	 ('The Sims 4','Electronic Arts','2014-09-02','Simulation de vie',2.4,'https://gaming-cdn.com/images/products/272/orig/les-sims-4-pc-mac-jeu-ea-app-cover.jpg?v=1687537282'),
+	 ('Dota 2','Valve','2013-07-09','MOBA',0.5,'https://business-portal-bucket.s3.amazonaws.com/media/images/41e172c318357d632f53b92d8cb38661_large_cover.original.jpg'),
+	 ('Rainbow Six Siege','Ubisoft','2015-12-01','Tactique en équipe',1.4,'https://staticg.sportskeeda.com/editor/2020/02/fb6ac-15814681607008-800.jpg'),
+	 ('Assassin''s Creed Odyssey','Ubisoft','2018-10-05','Action RPG',4.2,'https://staticctf.ubisoft.com/J3yJr34U2pZ2Ieem48Dwy9uqj5PNUQTn/5KuqRrODm37CsqpMHc4Sxk/2468170b919029ce8604b66d4bc2e272/ubinews-kassandra_reveal-boxartwork-thumbnail_333173.jpg'),
+	 ('Fallout 4','Bethesda Softworks','2015-11-10','Action RPG',1.8,'https://i.ebayimg.com/images/g/LG4AAOSwabBdk1XV/s-l1200.webp'),
+	 ('Genshin Impact','miHoYo','2020-09-28','Action RPG',0.5,'https://www.ecranlarge.com/uploads/image/001/398/genshin-impact-cover-1398052.jpg');
+INSERT INTO tp_jeux.jeux (titreJ,editeurJ,anneeJ,descJ,prixJ,imgJ) VALUES
+	 ('Dark Souls III','Bandai Namco Entertainment','2016-04-12','Action RPG',3.9,'https://gameactu.eu/wp-content/uploads/2016/05/darksouls3-une.jpg'),
+	 ('Tom Clancy''s The Division 2','Ubisoft','2019-03-15','Action RPG',2.4,'https://cdn.mobygames.com/covers/7685527-tom-clancys-the-division-2-playstation-4-front-cover.png');
