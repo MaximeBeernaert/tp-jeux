@@ -151,8 +151,10 @@ export default function CarteJeux({ idJ }) {
   return (
     <div className='carte-jeux' onClick={handleShowDetails}>
       <div className='carte-jeux-items'>
-        <div className='carte-jeux-img'>
-          image de {jeux.titreJ}
+        <div className='carte-jeux-img' >
+            <div className='image-spec'>
+              <img className='img' src={jeux.imgJ} alt={jeux.titreJ} />
+            </div>
         </div>        
         <Box className='carte-jeux-text' sx ={{bgcolor:'secondary.main'}}>
           {/* Détails du jeu */}
